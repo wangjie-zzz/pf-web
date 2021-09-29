@@ -12,8 +12,7 @@ class AuthApi extends BaseApi {
   initPf() {
     this.oauthApi = {
       authorize: {
-        //"http://localhost:8201/pf-auth/oauth/authorize"/*TODO 网关时有问题*/
-        url: "http://localhost:8401/oauth/authorize",
+        url: "http://localhost:8401/oauth/authorize", // TODO href 地址
         method: MethodTypeEnum.GET.code,
         header: HeaderTypeEnum.BASE.code
       },
@@ -26,12 +25,25 @@ class AuthApi extends BaseApi {
         url: this.getUrl() + "/logout",
         method: MethodTypeEnum.GET.code,
         header: HeaderTypeEnum.BASE.code
+      },
+      refreshToken: {
+        url: this.getUrl() + "/sso/refreshToken",
+        method: MethodTypeEnum.POST.code,
+        header: HeaderTypeEnum.AUTH.code
       }
     };
   }
 
   getUrl(): string {
-    return this.enableGateway ? this.baseUrl + "/" + this.project : this.baseUrl;
+    // TODO 经过网关有问题
+    if (this.enableGateway) {
+      if (this.enableProxy) {
+        return `/${this.project}-api`;
+      } else {
+        return process.env.VUE_APP_AUTH_URL || "";
+      }
+    }
+    return this.baseUrl;
   }
 }
 export const authApi = new AuthApi();

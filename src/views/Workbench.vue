@@ -1,12 +1,15 @@
 <template>
   <h1>欢迎来到工作台！！！</h1>
   <el-button @click="menuList">menuList</el-button>
+  <el-button @click="access">access auth</el-button>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
+import { authApi } from "@/constants/api/auth-api";
+import { Constants } from "@/constants/constants";
 export default defineComponent({
   name: "Workbench",
   setup() {
@@ -15,8 +18,16 @@ export default defineComponent({
         console.log(res);
       });
     };
+    const access = () => {
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      const params = { ...Constants.AUTHORIZE_CALLBACK_PARAMS, refresh_token: sessionStorage.getItem(Constants.REFRESH_TOKEN) };
+      clientService.general(authApi.oauthApi.refreshToken, undefined, params).then(res => {
+        console.log(res);
+      });
+    };
     return {
-      menuList
+      menuList,
+      access
     };
   }
 });

@@ -38,7 +38,7 @@ import { clientService } from "@/services/client-service";
 import { ElMessageBox } from "element-plus";
 import { SysMenu } from "@/model/SysMenu";
 import { authApi } from "@/constants/api/auth-api";
-import { clearCookies } from "@/constants/util/cookies-utils";
+import { Constants } from "@/constants/constants";
 
 export default defineComponent({
   name: "PfLayout",
@@ -81,7 +81,9 @@ export default defineComponent({
       ElMessageBox.confirm("退出当前用户，是否确认？", { confirmButtonText: "确定", cancelButtonText: "取消", type: "warning" }).then(() => {
         /*点击确认*/
         clientService.general(authApi.oauthApi.logout).then(res => {
-          clearCookies();
+          if (res.code === Constants.CODE.SUCCESS) {
+            sessionStorage.clear();
+          }
           window.location.reload();
         });
       });

@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { clientService } from "@/services/client-service";
 import { authApi } from "@/constants/api/auth-api";
@@ -31,6 +31,9 @@ export default defineComponent({
           .then(res => {
             console.log(res);
             if (res.code === Constants.CODE.SUCCESS) {
+              sessionStorage.setItem(Constants.TOKEN, (res.data as any).accessToken);
+              sessionStorage.setItem(Constants.REFRESH_TOKEN, (res.data as any).refreshToken);
+              sessionStorage.setItem(Constants.USER, (res.data as any).jti);
               router.push(Constants.HOME_PAGE);
             } else {
               logining.value = false;
@@ -40,7 +43,9 @@ export default defineComponent({
         logining.value = false;
       }
     };
-    initToken();
+    onMounted(() => {
+      initToken();
+    });
     return {
       logining,
       initToken

@@ -4,6 +4,7 @@ import { HeaderService } from "@/services/header-service";
 import { Constants } from "@/constants/constants";
 import { CommonResult } from "@/model/CommonResult";
 import { ApiDetail } from "@/constants/api/base-api";
+import { authApi } from "@/constants/api/auth-api";
 
 class ClientService extends HeaderService {
   private fetch0(path: string, method: string = MethodTypeEnum.GET.code, param: any, requestConfig: RequestInit): Promise<any> {
@@ -51,6 +52,10 @@ class ClientService extends HeaderService {
               return Promise.resolve(response);
             }
           });
+        } else if (response.code === Constants.CODE.FORCE_LOGOUT) {
+          // TODO 添加被踢出提示
+          const href = this.urlQueryConvert(authApi.oauthApi.authorize.url, Constants.AUTHORIZE_CODE_PARAMS);
+          location.href = href;
         } else {
           return Promise.resolve(response);
         }
@@ -63,11 +68,17 @@ class ClientService extends HeaderService {
   successHanlder() {
     return (response: Response) => {
       // console.log(response);
+      debugger;
       if (typeof response === "object") {
         if (response.ok && response.status === 200) {
           return response.json();
         } else if (response.status === 404) {
           return { code: 404, message: "请求路径错误" };
+        } else if (response.status === 401) {
+          /*response = Response {type: "basic", 
+          url: "http://localhost:4200/xxxxxxxxxxxxx", redirected: false, status: 401, ok: false, …}*/
+          const href = this.urlQueryConvert(authApi.oauthApi.authorize.url, Constants.AUTHORIZE_CODE_PARAMS);
+          location.href = href;
         }
       } else {
         return { code: Constants.CODE.SERVER_FAIL, message: "服务器响应异常" };

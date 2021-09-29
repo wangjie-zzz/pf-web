@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { Constants } from "@/constants/constants";
 import { systemRouter } from "@/router/system.router";
-import { getCookie } from "@/constants/util/cookies-utils";
 import { MethodTypeEnum } from "@/constants/enum/method-type.enum";
 import { clientService } from "@/services/client-service";
 import { authApi } from "@/constants/api/auth-api";
@@ -45,7 +44,7 @@ const router = createRouter({
   routes: routes
 });
 router.beforeEach((to, from, next) => {
-  if (!getCookie(Constants.TOKEN) && Constants.PERMITALL.findIndex(path => to.path === path) === -1) {
+  if (!sessionStorage.getItem(Constants.TOKEN) && Constants.PERMITALL.findIndex(path => to.path === path) === -1) {
     const href = clientService.urlQueryConvert(authApi.oauthApi.authorize.url, Constants.AUTHORIZE_CODE_PARAMS);
     location.href = href;
   } else {

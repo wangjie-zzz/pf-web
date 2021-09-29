@@ -1,4 +1,3 @@
-import { getCookie } from "@/constants/util/cookies-utils";
 import { Constants } from "@/constants/constants";
 export class HeaderService {
   createBasicHeaders(): RequestInit {
@@ -13,9 +12,9 @@ export class HeaderService {
   createAuthHeaders(): RequestInit {
     return {
       headers: {
-        Authorization: "Bearer " + getCookie(Constants.TOKEN),
+        Authorization: "Bearer " + sessionStorage.getItem(Constants.TOKEN),
         // eslint-disable-next-line @typescript-eslint/camelcase
-        user_identity: getCookie(Constants.USER) || "",
+        user_identity: sessionStorage.getItem(Constants.USER) || "",
         "Content-Type": "application/json",
         Accept: "application/json"
       }

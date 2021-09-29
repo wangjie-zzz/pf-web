@@ -33,7 +33,7 @@ module.exports = {
     port: port,
     // headers: {
     //   "Access-Control-Allow-Origin": "*"
-    // }
+    // },
     proxy: getProxyApi()
   },
   productionSourceMap: process.env.NODE_ENV !== "production",
