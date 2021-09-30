@@ -3,6 +3,7 @@ import { Constants } from "@/constants/constants";
 import { systemRouter } from "@/router/system.router";
 import { clientService } from "@/services/client-service";
 import { authApi } from "@/constants/api/auth-api";
+import { authService } from "@/services/auth-service";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -43,7 +44,7 @@ const router = createRouter({
   routes: routes
 });
 router.beforeEach((to, from, next) => {
-  if (!sessionStorage.getItem(Constants.TOKEN) && Constants.PERMITALL.findIndex(path => to.path === path) === -1) {
+  if (authService.checkToken() && Constants.PERMITALL.findIndex(path => to.path === path) === -1) {
     const href = clientService.urlQueryConvert(authApi.oauthApi.authorize.url, Constants.AUTHORIZE_CODE_PARAMS);
     location.href = href;
   } else {

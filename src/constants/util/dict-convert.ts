@@ -1,13 +1,13 @@
-import { dictService } from "@/services/dict-service";
 import { SysDict } from "@/model/SysDict";
 import { Options } from "@/model/entity/FormModel";
 import { UseStateEnum } from "@/constants/enum/use-state.enum";
+import { authService } from "@/services/auth-service";
 
 export function useDict() {
   const convertDict = (name: string, code: string): string => {
     if (name) {
       const dicts: SysDict[] =
-        dictService
+        authService
           .getDict()
           .filter(d => d.dictField === name)
           .filter(d1 => d1.dictKey === String(code)) || [];
@@ -17,7 +17,7 @@ export function useDict() {
   };
   const convertOptions = (dict: string): Options[] => {
     if (!dict) return [];
-    return dictService
+    return authService
       .getDict()
       .filter(d => d.dictField === dict)
       .map(d1 => {

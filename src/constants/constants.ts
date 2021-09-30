@@ -1,8 +1,4 @@
 export class Constants {
-  static TOKEN = "access_token";
-  static REFRESH_TOKEN = "refresh_token";
-  static USER = "user_identity";
-  static DICT = "dict";
   static CODE = {
     SUCCESS: 200,
     SERVER_FAIL: 500,

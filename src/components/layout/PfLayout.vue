@@ -39,6 +39,7 @@ import { ElMessageBox } from "element-plus";
 import { SysMenu } from "@/model/SysMenu";
 import { authApi } from "@/constants/api/auth-api";
 import { Constants } from "@/constants/constants";
+import { authService } from "@/services/auth-service";
 
 export default defineComponent({
   name: "PfLayout",
@@ -82,7 +83,7 @@ export default defineComponent({
         /*点击确认*/
         clientService.general(authApi.oauthApi.logout).then(res => {
           if (res.code === Constants.CODE.SUCCESS) {
-            sessionStorage.clear();
+            authService.clearCache();
           }
           window.location.reload();
         });

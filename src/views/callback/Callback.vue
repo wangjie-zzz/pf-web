@@ -16,6 +16,7 @@ import { clientService } from "@/services/client-service";
 import { authApi } from "@/constants/api/auth-api";
 import { Constants } from "@/constants/constants";
 import router from "@/router";
+import { authService } from "@/services/auth-service";
 export default defineComponent({
   name: "Callback",
   setup() {
@@ -31,9 +32,7 @@ export default defineComponent({
           .then(res => {
             console.log(res);
             if (res.code === Constants.CODE.SUCCESS) {
-              sessionStorage.setItem(Constants.TOKEN, (res.data as any).accessToken);
-              sessionStorage.setItem(Constants.REFRESH_TOKEN, (res.data as any).refreshToken);
-              sessionStorage.setItem(Constants.USER, (res.data as any).jti);
+              authService.setCache(res.data);
               router.push(Constants.HOME_PAGE);
             } else {
               logining.value = false;

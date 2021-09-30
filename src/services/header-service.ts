@@ -1,4 +1,5 @@
 import { Constants } from "@/constants/constants";
+import { authService } from "@/services/auth-service";
 export class HeaderService {
   createBasicHeaders(): RequestInit {
     return {
@@ -12,9 +13,9 @@ export class HeaderService {
   createAuthHeaders(): RequestInit {
     return {
       headers: {
-        Authorization: "Bearer " + sessionStorage.getItem(Constants.TOKEN),
+        Authorization: "Bearer " + authService.getToken(),
         // eslint-disable-next-line @typescript-eslint/camelcase
-        user_identity: sessionStorage.getItem(Constants.USER) || "",
+        user_identity: authService.getUser(),
         "Content-Type": "application/json",
         Accept: "application/json"
       }
