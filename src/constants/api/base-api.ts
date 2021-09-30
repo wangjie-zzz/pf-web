@@ -56,4 +56,7 @@ export class BaseApi {
   getUrl(): string {
     return this.baseUrl + "/" + this.project + this.prefix;
   }
+  getUrlNotPrefix(): string {
+    return this.baseUrl + "/" + this.project;
+  }
 }
