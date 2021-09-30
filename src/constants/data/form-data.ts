@@ -1,5 +1,6 @@
 import { FormFieldModel, FormModel, FormTypeEnum } from "@/model/entity/FormModel";
-import { USE_STATE, UseStateEnum } from "@/constants/enum/use-state.enum";
+import { UseStateEnum } from "@/constants/enum/use-state.enum";
+import { DictNameEnum } from "@/constants/enum/dict-name.enum";
 const toFormValue = (form: FormModel, value?: any) => {
   if (!value) {
     value = {};
@@ -231,7 +232,7 @@ const sysDictForm = (): FormModel => {
         prop: "dictUseState",
         label: "使用状态",
         type: FormTypeEnum.SELECT.code,
-        dict: USE_STATE,
+        dict: DictNameEnum.USE_STATE,
         value: UseStateEnum.VAILD.code,
         required: true,
         rules: []
@@ -256,7 +257,7 @@ const tenantForm = (): FormModel => {
         prop: "tenUseState",
         label: "使用状态",
         type: FormTypeEnum.SELECT.code,
-        dict: USE_STATE,
+        dict: DictNameEnum.USE_STATE,
         value: UseStateEnum.VAILD.code,
         required: true,
         rules: []

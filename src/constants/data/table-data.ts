@@ -1,5 +1,5 @@
 import { TableColumnModel, TableModel } from "@/model/entity/TabelModel";
-import { USE_STATE } from "@/constants/enum/use-state.enum";
+import { DictNameEnum } from "@/constants/enum/dict-name.enum";
 
 const sysDict = (): TableModel => {
   return new TableModel({
@@ -12,8 +12,7 @@ const sysDict = (): TableModel => {
       }),
       new TableColumnModel({
         prop: "appId",
-        dict: "TABLE_TYPE",
-        label: "类型"
+        label: "应用id"
       }),
       new TableColumnModel({
         prop: "dictField",
@@ -38,7 +37,7 @@ const sysDict = (): TableModel => {
       new TableColumnModel({
         prop: "dictUseState",
         label: "使用状态",
-        dict: USE_STATE
+        dict: DictNameEnum.USE_STATE
       })
     ]
   });
@@ -59,7 +58,7 @@ const tenantInfo = (): TableModel => {
       new TableColumnModel({
         prop: "tenUseState",
         label: "使用状态",
-        dict: USE_STATE
+        dict: DictNameEnum.USE_STATE
       }),
       new TableColumnModel({
         prop: "tenIntDate",
@@ -88,7 +87,7 @@ const sysDept = (): TableModel => {
       new TableColumnModel({
         prop: "deptUseState",
         label: "使用状态",
-        dict: USE_STATE
+        dict: DictNameEnum.USE_STATE
       }),
       new TableColumnModel({
         prop: "deptIntDate",
@@ -125,12 +124,12 @@ const sysUser = (): TableModel => {
       new TableColumnModel({
         prop: "userCardId",
         label: "证件号码",
-        dict: USE_STATE
+        dict: DictNameEnum.USE_STATE
       }),
       new TableColumnModel({
         prop: "userUseState",
         label: "使用状态",
-        dict: USE_STATE
+        dict: DictNameEnum.USE_STATE
       }),
       new TableColumnModel({
         prop: "userIntDate",
@@ -159,7 +158,8 @@ const sysRole = (): TableModel => {
       }),
       new TableColumnModel({
         prop: "roleType",
-        label: "角色类型"
+        label: "角色类型",
+        dict: DictNameEnum.ROLE_REL_TYPE
       }),
       new TableColumnModel({
         prop: "roleTenId",
@@ -168,7 +168,7 @@ const sysRole = (): TableModel => {
       new TableColumnModel({
         prop: "roleUseState",
         label: "使用状态",
-        dict: USE_STATE
+        dict: DictNameEnum.USE_STATE
       }),
       new TableColumnModel({
         prop: "roleIntDate",
@@ -206,7 +206,7 @@ const sysPost = (): TableModel => {
       new TableColumnModel({
         prop: "postUseState",
         label: "使用状态",
-        dict: USE_STATE
+        dict: DictNameEnum.USE_STATE
       }),
       new TableColumnModel({
         prop: "postIntDate",

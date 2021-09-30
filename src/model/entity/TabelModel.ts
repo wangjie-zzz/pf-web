@@ -1,3 +1,5 @@
+import { DictNameEnum } from "@/constants/enum/dict-name.enum";
+
 export const TableTypeEnum = {
   selection: { code: "selection", name: "" },
   expand: { code: "expand", name: "" },
@@ -84,7 +86,7 @@ export class TableModel {
 export class TableColumnModel {
   prop: string; /*也可以使用 property 属性	*/
   label: string;
-  dict?: string;
+  dict?: DictNameEnum;
   width?: string; /*对应列的宽度*/
   minWidth?: string; /*对应列的最小宽度，与 width 的区别是 width 是固定的，min-width 会把剩余宽度按比例分配给设置了 min-width 的列*/
   fixed?: boolean | string; /*列是否固定在左侧或者右侧，true表示固定在左侧true/left/right  false*/
@@ -106,7 +108,7 @@ export class TableColumnModel {
   constructor(param: {
     prop: string;
     label: string;
-    dict?: string;
+    dict?: DictNameEnum;
     type?: string;
     index?: number | ((idx: any) => number);
     selectable?: (row: any, index: any) => boolean;

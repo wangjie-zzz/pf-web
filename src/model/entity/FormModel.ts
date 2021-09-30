@@ -1,5 +1,6 @@
 import { RuleItem } from "async-validator";
 import { useDict } from "@/constants/util/dict-convert";
+import { DictNameEnum } from "@/constants/enum/dict-name.enum";
 
 export const FormTypeEnum = {
   INPUT: { code: "1", name: "输入框" },
@@ -151,7 +152,7 @@ export class FormFieldModel {
   prop: string;
   type: string;
   value?: any;
-  dict?: string;
+  dict?: DictNameEnum;
   /*cascader/select 是否可以清空输入值*/
   clearable: boolean;
   /*select 多选*/
@@ -199,7 +200,7 @@ export class FormFieldModel {
     disable?: boolean;
     hidden?: boolean;
     type?: string;
-    dict?: string;
+    dict?: DictNameEnum;
     value?: any;
     options?: Options[];
     required?: boolean;
@@ -231,7 +232,7 @@ export class FormFieldModel {
     this.type = param.type || FormTypeEnum.INPUT.code;
     this.dict = param.dict;
     this.value = param.value;
-    this.options = param.options || convertOptions(this.dict || "");
+    this.options = param.options && param.options.length ? param.options : this.dict ? convertOptions(this.dict) : [];
     this.required = param.required;
     this.showMessage = param.showMessage;
     this.inlineMessage = param.inlineMessage;
