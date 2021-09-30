@@ -20,7 +20,7 @@ class AuthService {
     });
   }
 
-  private setDict(data: SysDict[]): void {
+  setDict(data: SysDict[]): void {
     sessionStorage.setItem(this.DICT, JSON.stringify(data));
   }
   getDict(): SysDict[] {

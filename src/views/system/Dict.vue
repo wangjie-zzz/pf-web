@@ -3,6 +3,7 @@
     <div class="pf-mt-20 pf-text-left">
       <el-button icon="el-icon-refresh" @click="select"></el-button>
       <el-button type="primary" @click="create">创建</el-button>
+      <el-button type="primary" @click="setCache">重置缓存</el-button>
       <el-button @click="del">删除</el-button>
     </div>
     <el-table class="pf-mt-20" :config="dictConfig" :data="dictData">
@@ -40,20 +41,21 @@ import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
 import { sysDictForm, toFormValue } from "@/constants/data/form-data";
 import { SysDict } from "@/model/SysDict";
+import { authService } from "@/services/auth-service";
 
 export default defineComponent({
   name: "Dict",
   setup() {
     const { message, loading } = useNotice();
     const dictConfig = sysDict();
-    const dictData: Ref<any[]> = ref([]);
+    const dictData: Ref<SysDict[]> = ref([]);
     const show: Ref<boolean> = ref(false);
     const formConfig = reactive(sysDictForm());
     const dictForm = ref(null);
     const formInfo: Ref<SysDict> = ref(toFormValue(formConfig));
     const select = () => {
       loading.open();
-      clientService.general<any[]>(systemApi.dictApi.list).then(res => {
+      clientService.general<SysDict[]>(systemApi.dictApi.list).then(res => {
         loading.close();
         if (res.code === Constants.CODE.SUCCESS) {
           dictData.value = res.data;
@@ -63,7 +65,9 @@ export default defineComponent({
       });
     };
     select();
-
+    const setCache = () => {
+      authService.setDict(dictData.value);
+    };
     const create = () => {
       formInfo.value = toFormValue(formConfig);
       show.value = true;
@@ -104,6 +108,7 @@ export default defineComponent({
       dictConfig,
       handleClick,
       create,
+      setCache,
       confirmCreate,
       del,
       show,
