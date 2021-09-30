@@ -42,6 +42,10 @@ class ClientService extends HeaderService {
     path = this.urlQueryConvert(path, query);
     return this.fetch0(path, method, params, requestConfig)
       .then(response => {
+        if (response.code) {
+          // TODO 后端Long的序列化丢失精度问题导致code也返回了string，待优化
+          response.code = Number(response.code);
+        }
         if (response.code === Constants.CODE.INVALID_TOKEN) {
           console.warn("token已过期，刷新中...");
           return this.refreshToken().then((res: boolean) => {
@@ -78,6 +82,8 @@ class ClientService extends HeaderService {
           url: "http://localhost:4200/xxxxxxxxxxxxx", redirected: false, status: 401, ok: false, …}*/
           const href = this.urlQueryConvert(authApi.oauthApi.authorize.url, Constants.AUTHORIZE_CODE_PARAMS);
           location.href = href;
+        } else if (response.status === 503) {
+          return { code: Constants.CODE.SERVER_FAIL, message: "请求服务响应异常" };
         }
       } else {
         return { code: Constants.CODE.SERVER_FAIL, message: "服务器响应异常" };

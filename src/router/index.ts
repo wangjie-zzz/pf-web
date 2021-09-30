@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { Constants } from "@/constants/constants";
 import { systemRouter } from "@/router/system.router";
-import { MethodTypeEnum } from "@/constants/enum/method-type.enum";
 import { clientService } from "@/services/client-service";
 import { authApi } from "@/constants/api/auth-api";
 
