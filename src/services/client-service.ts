@@ -5,6 +5,7 @@ import { Constants } from "@/constants/constants";
 import { CommonResult } from "@/model/CommonResult";
 import { ApiDetail } from "@/constants/api/base-api";
 import { authApi } from "@/constants/api/auth-api";
+import { authService } from "@/services/auth-service";
 
 class ClientService extends HeaderService {
   private fetch0(path: string, method: string = MethodTypeEnum.GET.code, param: any, requestConfig: RequestInit): Promise<any> {
@@ -78,6 +79,7 @@ class ClientService extends HeaderService {
         } else if (response.status === 404) {
           return { code: 404, message: "请求路径错误" };
         } else if (response.status === 401) {
+          //TODO 添加sessionId异常提示
           /*response = Response {type: "basic", 
           url: "http://localhost:4200/xxxxxxxxxxxxx", redirected: false, status: 401, ok: false, …}*/
           const href = this.urlQueryConvert(authApi.oauthApi.authorize.url, Constants.AUTHORIZE_CODE_PARAMS);
@@ -137,9 +139,12 @@ class ClientService extends HeaderService {
   }
 
   refreshToken(): Promise<boolean> {
-    /*TODO*/
-    console.log("refreshtoken....");
-    return Promise.resolve(false);
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    const params = { ...Constants.AUTHORIZE_CALLBACK_PARAMS, refresh_token: authService.getRefreshToken() };
+    return this.general(authApi.oauthApi.refreshToken, undefined, params).then(res => {
+      authService.setCache(res.data);
+      return Promise.resolve(true);
+    });
   }
 }
 export const clientService = new ClientService();
