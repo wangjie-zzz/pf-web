@@ -68,7 +68,6 @@ class ClientService extends HeaderService {
   successHanlder() {
     return (response: Response) => {
       // console.log(response);
-      debugger;
       if (typeof response === "object") {
         if (response.ok && response.status === 200) {
           return response.json();
