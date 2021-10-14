@@ -300,7 +300,11 @@ export default defineComponent({
     };
 
     const clearValidate = (props: string | string[] = []) => {
-      const fds = props.length ? (typeof props === "string" ? fields.filter(field => props === field.prop) : fields.filter(field => field && field.prop !== undefined && props.indexOf(field.prop) > -1)) : fields;
+      const fds = props.length
+        ? typeof props === "string"
+          ? fields.filter(field => props === field.prop)
+          : fields.filter(field => field && field.prop !== undefined && props.indexOf(field.prop) > -1)
+        : fields;
       fds.forEach(field => {
         field.clearValidate();
       });
