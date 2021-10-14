@@ -207,8 +207,18 @@
     ></div>
     <div v-show="resizeProxyVisible" ref="resizeProxy" class="el-table__column-resize-proxy"></div>
     <div v-if="config.showPage" class="pf-p-10 pf-text-right">
-      <el-pagination @size-change="pageSizeChange" @prev-click="pageChange" @next-click="pageChange" @current-change="pageChange" :current-page="pageNum" :page-sizes="options" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="recordTotal"> </el-pagination>
-      }
+      <el-pagination
+        @size-change="pageSizeChange"
+        @prev-click="pageChange"
+        @next-click="pageChange"
+        @current-change="pageChange"
+        :current-page="pageNum"
+        :page-sizes="options"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="recordTotal"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
