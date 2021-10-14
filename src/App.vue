@@ -71,8 +71,11 @@ export default defineComponent({
       () => route.name,
       () => {
         const menuId = menusService.refreshCrumbs(route, crumbs);
-        activeCrumb.value = route.fullPath;
-        activeMenuId.value = menuId;
+        // 跳转的路由：不是菜单 && 没有meta信息则不加到crumbs
+        if (menuId) {
+          activeCrumb.value = route.fullPath;
+          activeMenuId.value = menuId;
+        }
       }
     );
     return {};
