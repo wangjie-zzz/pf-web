@@ -1,5 +1,5 @@
 <template>
-  <div class="pf-flex pf-p-5">
+  <div class="pf-flex">
     <div class="pf-w-15 pf-p-10 pf-mr-10 pf-bgwhite">
       <el-button icon="el-icon-refresh" size="mini" @click="refreshComp"></el-button>
       <el-button type="primary" size="mini" @click="createComp">添加</el-button>
