@@ -28,7 +28,19 @@ export class FormModel {
   showMessage: boolean; /*显示校验错误信息 true*/
   inlineMessage: boolean; /*inline形式显示校验信息 false*/
   statusIcon: boolean; /*在输入框中显示校验结果反馈图标 false*/
-  constructor(param: { name: string; fields?: FormFieldModel[]; rules?: RuleItem[]; labelPosition?: string; labelWidth?: string; disabled?: boolean; validateOnRuleChange?: boolean; hideRequiredAsterisk?: boolean; showMessage?: boolean; inlineMessage?: boolean; statusIcon?: boolean }) {
+  constructor(param: {
+    name: string;
+    fields?: FormFieldModel[];
+    rules?: RuleItem[];
+    labelPosition?: string;
+    labelWidth?: string;
+    disabled?: boolean;
+    validateOnRuleChange?: boolean;
+    hideRequiredAsterisk?: boolean;
+    showMessage?: boolean;
+    inlineMessage?: boolean;
+    statusIcon?: boolean;
+  }) {
     this.name = param.name;
     this.fields = param.fields || [];
     // this.inline = param.inline || false;
