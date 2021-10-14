@@ -9,7 +9,7 @@
           <el-button class="pf-vertical-middle" type="text" @click="collapse = !collapse">
             <i class="pf-fs-40 pf-white" :class="collapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"></i>
           </el-button>
-          <span class="pf-ml-5">欢迎进入webx-manager</span>
+          <span class="pf-ml-5">欢迎进入developer-platform</span>
         </div>
         <el-button class="pf-h-50 pf-mr-15" @click="logout">退出登录</el-button>
       </div>
