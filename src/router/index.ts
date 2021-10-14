@@ -4,6 +4,7 @@ import { systemRouter } from "@/router/system.router";
 import { clientService } from "@/services/client-service";
 import { authApi } from "@/constants/api/auth-api";
 import { authService } from "@/services/auth-service";
+import { pageConfigRouter } from "@/router/page-config.router";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,7 +26,8 @@ const routes: Array<RouteRecordRaw> = [
         name: "Workbench",
         component: () => import(/* webpackChunkName: "Main" */ "@/views/Workbench.vue")
       },
-      ...systemRouter
+      ...systemRouter,
+      ...pageConfigRouter
     ]
   },
   {

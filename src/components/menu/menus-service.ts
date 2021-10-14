@@ -60,6 +60,43 @@ class MenusService {
       ]
     },
     {
+      menuId: "page-config",
+      menuName: "页面配置",
+      menuType: MenuTypeEnum.LINK.code,
+      menuUrl: "/main/page-config",
+      menuIcon: "el-icon-tickets",
+      children: [
+        {
+          menuId: "meta-data",
+          menuName: "元数据管理",
+          menuType: MenuTypeEnum.LINK.code,
+          menuUrl: "/main/page-config/meta-data",
+          children: []
+        },
+        {
+          menuId: "form",
+          menuName: "表单配置",
+          menuType: MenuTypeEnum.LINK.code,
+          menuUrl: "/main/page-config/form",
+          children: []
+        },
+        {
+          menuId: "table",
+          menuName: "表格配置",
+          menuType: MenuTypeEnum.LINK.code,
+          menuUrl: "/main/page-config/table",
+          children: []
+        },
+        {
+          menuId: "layout",
+          menuName: "布局配置",
+          menuType: MenuTypeEnum.LINK.code,
+          menuUrl: "/main/page-config/layout",
+          children: []
+        }
+      ]
+    },
+    {
       menuId: "help",
       menuName: "帮助",
       menuType: MenuTypeEnum.LINK.code,
