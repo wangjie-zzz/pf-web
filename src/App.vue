@@ -2,7 +2,23 @@
   <router-view />
 </template>
 <script lang="ts">
-import { defineComponent, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured, onRenderTracked, onRenderTriggered, reactive, Ref, ref, provide, watch } from "vue";
+import {
+  defineComponent,
+  onBeforeMount,
+  onMounted,
+  onBeforeUpdate,
+  onUpdated,
+  onBeforeUnmount,
+  onUnmounted,
+  onErrorCaptured,
+  onRenderTracked,
+  onRenderTriggered,
+  reactive,
+  Ref,
+  ref,
+  provide,
+  watch
+} from "vue";
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from "vue-router";
 import { Crumb } from "@/model/Crumb";
 import { menusService } from "@/components/menu/menus-service";
