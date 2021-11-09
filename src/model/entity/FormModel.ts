@@ -246,7 +246,7 @@ export class FormFieldModel {
     this.value = param.value;
     this.options = param.options && param.options.length ? param.options : this.dict ? convertOptions(this.dict) : [];
     this.required = param.required;
-    this.showMessage = param.showMessage;
+    this.showMessage = param.showMessage; // TODO 好像是失效的
     this.inlineMessage = param.inlineMessage;
     this.showPassword = param.showPassword;
     this.prefix = param.prefix;
