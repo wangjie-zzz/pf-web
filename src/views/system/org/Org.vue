@@ -97,13 +97,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, reactive, watch } from "vue";
-import { useOrg, TNode } from "@/views/system/org/use-org";
-import { companyForm, deptForm, sysUserForm, toFormValue } from "@/constants/data/form-data";
+import { defineComponent, reactive, Ref, ref, watch } from "vue";
+import { TNode, useOrg } from "@/views/system/org/use-org";
 import { useTenant } from "@/views/system/tenant/use-tenant";
-import { Options } from "@/model/entity/FormModel";
+import { FormModel } from "@/model/entity/FormModel";
 import { sysDept, sysUser } from "@/constants/data/table-data";
 import { useNotice } from "@/components/element-plus/notice";
+import { dataService } from "@/services/data-service";
+import { FormNameEnum } from "@/constants/enum/form-name.enum";
+
 export default defineComponent({
   name: "User",
   setup() {
@@ -112,10 +114,11 @@ export default defineComponent({
     const activeTab = ref("dept");
     const activeNode: Ref<TNode> = ref({} as any);
     const treeData: Ref<TNode[]> = ref([]);
+
     const show = ref(false);
     const compForm = ref(null);
-    const compFormConfig = reactive(companyForm());
-    const compInfo = toFormValue(compFormConfig);
+    const compFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const compInfo: Ref<any> = ref(null as any);
 
     const refreshComp = () => {
       companyList().then(res => {
@@ -128,7 +131,7 @@ export default defineComponent({
       list().then(res => {
         show.value = true;
         if (res && res.length > 0) {
-          compFormConfig.setOptions(
+          compFormConfig.value?.setOptions(
             "comTenId",
             res.map(ten => {
               return { key: ten.tenId, value: ten.tenName, disabled: false };
@@ -140,7 +143,7 @@ export default defineComponent({
     const confirmCreateComp = () => {
       (compForm.value as any).validate((val: boolean) => {
         if (val) {
-          addCompany(compInfo, treeData).then(res => {
+          addCompany(compInfo.value, treeData).then(res => {
             if (res) {
               show.value = false;
             }
@@ -152,8 +155,8 @@ export default defineComponent({
     const userConfig = sysUser();
     const userData: Ref<any[]> = ref([]);
     const userFormRef = ref(null);
-    const userFormConfig = reactive(sysUserForm());
-    const userInfo = toFormValue(userFormConfig);
+    const userFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const userInfo: Ref<any> = ref(null as any);
     const refreshUser = () => {
       userList(activeNode.value.id, activeNode.value.isCom).then(res => {
         userData.value = res;
@@ -163,7 +166,7 @@ export default defineComponent({
       list().then(res => {
         show2.value = true;
         if (res && res.length > 0) {
-          userFormConfig.setOptions(
+          userFormConfig.value?.setOptions(
             "userTenId",
             res.map(ten => {
               return { key: ten.tenId, value: ten.tenName, disabled: false };
@@ -191,8 +194,8 @@ export default defineComponent({
     const deptConfig = sysDept();
     const deptData: Ref<any[]> = ref([]);
     const deptFormRef = ref(null);
-    const deptFormConfig = reactive(deptForm());
-    const deptInfo = toFormValue(deptFormConfig);
+    const deptFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const deptInfo: Ref<any> = ref(null as any);
     const refreshDept = () => {
       deptList(activeNode.value.id, activeNode.value.isCom).then(res => {
         deptData.value = res;
@@ -202,7 +205,7 @@ export default defineComponent({
       list().then(res => {
         show1.value = true;
         if (res && res.length > 0) {
-          deptFormConfig.setOptions(
+          deptFormConfig.value?.setOptions(
             "deptTenId",
             res.map(ten => {
               return { key: ten.tenId, value: ten.tenName, disabled: false };
@@ -217,7 +220,7 @@ export default defineComponent({
     const confirmCreateDept = () => {
       (deptFormRef.value as any).validate((val: boolean) => {
         if (val) {
-          addDept(deptInfo, treeData).then(res => {
+          addDept(deptInfo.value, treeData).then(res => {
             if (res) {
               show1.value = false;
             }
@@ -241,7 +244,7 @@ export default defineComponent({
     };
     const userFormRefChange = (newV: any, prop: string) => {
       if (prop === "userTenId") {
-        userFormConfig.setOptions(
+        userFormConfig.value?.setOptions(
           "userComId",
           tNodeToOptions(
             treeData.value.filter(t => t.isCom && t.supId === newV),
@@ -251,15 +254,15 @@ export default defineComponent({
       } else if (prop === "userComId") {
         const node = findNodeById(treeData.value, newV);
         if (node) {
-          userFormConfig.setOptions("userDeptId", tNodeToOptions(node.children.filter(t => !t.isCom)));
+          userFormConfig.value?.setOptions("userDeptId", tNodeToOptions(node.children.filter(t => !t.isCom)));
         } else {
-          userFormConfig.setOptions("userDeptId", []);
+          userFormConfig.value?.setOptions("userDeptId", []);
         }
       }
     };
     const deptFormRefChange = (newV: any, prop: string) => {
       if (prop === "deptTenId") {
-        deptFormConfig.setOptions(
+        deptFormConfig.value?.setOptions(
           "deptComId",
           tNodeToOptions(
             treeData.value.filter(t => t.isCom && t.supId === newV),
@@ -269,15 +272,15 @@ export default defineComponent({
       } else if (prop === "deptComId") {
         const node = findNodeById(treeData.value, newV);
         if (node) {
-          deptFormConfig.setOptions("deptSupDeptId", tNodeToOptions(node.children.filter(t => !t.isCom)));
+          deptFormConfig.value?.setOptions("deptSupDeptId", tNodeToOptions(node.children.filter(t => !t.isCom)));
         } else {
-          deptFormConfig.setOptions("deptSupDeptId", []);
+          deptFormConfig.value?.setOptions("deptSupDeptId", []);
         }
       }
     };
     const compFormChange = (newV: any, prop: string) => {
       if (prop === "comTenId") {
-        compFormConfig.setOptions(
+        compFormConfig.value?.setOptions(
           "comSupComId",
           tNodeToOptions(
             treeData.value.filter(t => t.isCom && t.supId === newV),
@@ -286,6 +289,19 @@ export default defineComponent({
         );
       }
     };
+    dataService
+      .getFormByName([
+        {
+          name: FormNameEnum.companyForm,
+          config: compFormConfig,
+          info: compInfo
+        },
+        { name: FormNameEnum.deptForm, config: deptFormConfig, info: deptInfo },
+        { name: FormNameEnum.sysUserForm, config: userFormConfig, info: userInfo }
+      ])
+      .then(res => {
+        console.log(deptFormConfig.value);
+      });
     return {
       activeTab,
       activeNode,

@@ -397,7 +397,7 @@ export default defineComponent({
         if (!isNaN(props.colCount)) {
           wd = Math.round(Number(100 / props.colCount));
         }
-        return { width: `calc(${wd * spanCol}% - 66px)` };
+        return { width: `calc(${wd * spanCol}% - 30px)` };
       };
     });
     const changeEvent = (newV: any, prop: string) => {

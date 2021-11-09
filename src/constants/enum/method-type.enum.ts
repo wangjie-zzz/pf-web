@@ -1,7 +1,7 @@
-const MethodTypeEnum = {
-  GET: { code: "get", name: "" },
-  POST: { code: "post", name: "" },
-  PUT: { code: "put", name: "" },
-  DELETE: { code: "delete", name: "" }
-};
+enum MethodTypeEnum {
+  GET = "get",
+  POST = "post",
+  PUT = "put",
+  DELETE = "delete"
+}
 export { MethodTypeEnum };

@@ -1,6 +1,9 @@
-const UseStateEnum = {
-  VAILD: { code: 1, name: "有效的" },
-  INVAILD: { code: 0, name: "无效的" },
-  FREEZE: { code: -1, name: "冻结的" }
+enum UseStateEnum {
+  VAILD = 1,
+  INVAILD = 0,
+  FREEZE = -1
+}
+const isValid = (val: number): boolean => {
+  return UseStateEnum.VAILD == val;
 };
-export { UseStateEnum };
+export { UseStateEnum, isValid };

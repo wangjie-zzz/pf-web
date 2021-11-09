@@ -35,19 +35,25 @@
 import { defineComponent, reactive, ref, Ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
 import { tenantInfo } from "@/constants/data/table-data";
-import { tenantForm, toFormValue } from "@/constants/data/form-data";
 import { SysDict } from "@/model/SysDict";
 import { useTenant } from "@/views/system/tenant/use-tenant";
+import { dataService } from "@/services/data-service";
+import { FormNameEnum } from "@/constants/enum/form-name.enum";
+import { FormModel } from "@/model/entity/FormModel";
+
 export default defineComponent({
   name: "Tenant",
   setup() {
     const { message } = useNotice();
     const dictConfig = tenantInfo();
     const dictData: Ref<any[]> = ref([]);
+
     const show: Ref<boolean> = ref(false);
-    const formConfig = reactive(tenantForm());
+    const formConfig: Ref<FormModel | undefined> = ref(undefined);
     const tenForm = ref(null);
-    const formInfo: Ref<SysDict> = ref(toFormValue(formConfig));
+    const formInfo: Ref<SysDict> = ref(null as any);
+    dataService.getFormByName([{ name: FormNameEnum.tenantForm, config: formConfig, info: formInfo }]).then(res => {});
+
     const { list, update } = useTenant();
     const select = () => {
       list().then(res => {
@@ -57,7 +63,7 @@ export default defineComponent({
     select();
 
     const create = () => {
-      formInfo.value = toFormValue(formConfig);
+      formInfo.value = dataService.toFormValue(formConfig as any);
       show.value = true;
     };
     const confirmCreate = () => {

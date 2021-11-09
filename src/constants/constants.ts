@@ -25,4 +25,5 @@ export class Constants {
     // eslint-disable-next-line @typescript-eslint/camelcase
     response_type: "code"
   };
+  static DEFAULT_APP_ID = "system"; // TODO
 }

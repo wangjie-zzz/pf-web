@@ -1,12 +1,11 @@
 <template>
-  <div class="pf-metadata-config">
-    <h1>MetadataConfig</h1>
+  <div class="pf-metadata-config pf-bgwhite pf-p-10">
+    <h1>MetadataConfig完善中。。。</h1>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import PfLayout from "@/components/layout/PfLayout.vue";
 
 export default defineComponent({
   name: "MetadataConfig",
@@ -18,10 +17,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .#{$prefix} {
   &-metadata-config {
-    margin: 10px;
-    padding: 0;
-    overflow-y: auto;
-    height: calc(100% - 60px);
   }
 }
 </style>

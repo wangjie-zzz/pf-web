@@ -13,10 +13,6 @@ export default {
 <style scoped lang="scss">
 .#{$prefix} {
   &-page-config {
-    margin: 10px;
-    padding: 0;
-    overflow-y: auto;
-    height: calc(100% - 60px);
   }
 }
 </style>

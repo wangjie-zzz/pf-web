@@ -1,6 +1,6 @@
 <template>
   <div class="pf-layout-config">
-    <h1>LayoutCOnfig完善中。。。</h1>
+    <h1>LayoutConfig完善中。。。</h1>
   </div>
 </template>
 

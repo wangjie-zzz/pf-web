@@ -39,9 +39,11 @@ import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
-import { sysDictForm, toFormValue } from "@/constants/data/form-data";
 import { SysDict } from "@/model/SysDict";
 import { authService } from "@/services/auth-service";
+import { FormModel } from "@/model/entity/FormModel";
+import { dataService } from "@/services/data-service";
+import { FormNameEnum } from "@/constants/enum/form-name.enum";
 
 export default defineComponent({
   name: "Dict",
@@ -50,9 +52,20 @@ export default defineComponent({
     const dictConfig = sysDict();
     const dictData: Ref<SysDict[]> = ref([]);
     const show: Ref<boolean> = ref(false);
-    const formConfig = reactive(sysDictForm());
+
+    const formConfig: Ref<FormModel | undefined> = ref(undefined);
+    const formInfo: Ref<SysDict> = ref(null as any);
     const dictForm = ref(null);
-    const formInfo: Ref<SysDict> = ref(toFormValue(formConfig));
+    dataService
+      .getFormByName([
+        {
+          name: FormNameEnum.sysDictForm,
+          config: formConfig,
+          info: formInfo
+        }
+      ])
+      .then(res => {});
+
     const select = () => {
       loading.open();
       clientService.general<SysDict[]>(systemApi.dictApi.list).then(res => {
@@ -69,7 +82,7 @@ export default defineComponent({
       authService.setDict(dictData.value);
     };
     const create = () => {
-      formInfo.value = toFormValue(formConfig);
+      formInfo.value = dataService.toFormValue(formConfig as any);
       show.value = true;
     };
     const confirmCreate = () => {

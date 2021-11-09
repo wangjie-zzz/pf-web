@@ -35,9 +35,142 @@ const sysDict = (): TableModel => {
         label: "显示顺序"
       }),
       new TableColumnModel({
-        prop: "dictUseState",
+        prop: "useState",
         label: "使用状态",
         dict: DictNameEnum.USE_STATE
+      })
+    ]
+  });
+};
+const sysForm = (): TableModel => {
+  return new TableModel({
+    name: "sysForm",
+    showPage: true,
+    columns: [
+      new TableColumnModel({
+        prop: "appId",
+        label: "应用id"
+      }),
+      new TableColumnModel({
+        prop: "name",
+        label: "表单名称"
+      }),
+      new TableColumnModel({
+        prop: "labelPosition",
+        label: "标题定位",
+        dict: DictNameEnum.LABEL_POSITION
+      }),
+      new TableColumnModel({
+        prop: "labelWidth",
+        label: "标题宽度"
+      }),
+      new TableColumnModel({
+        prop: "disabled",
+        label: "是否禁用",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "validateOnRuleChange",
+        label: "是否校验规则改变后立即触发校验",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "hideRequiredAsterisk",
+        label: "是否必填项隐藏红色*",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "showMessage",
+        label: "是否显示校验错误信息",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "inlineMessage",
+        label: "是否inline形式显示校验错误信息",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "statusIcon",
+        label: "是否显示校验结果提示图标",
+        dict: DictNameEnum.BOOLEAN
+      })
+    ]
+  });
+};
+const sysFormField = (): TableModel => {
+  return new TableModel({
+    name: "sysFormField",
+    showPage: true,
+    columns: [
+      new TableColumnModel({
+        prop: "appId",
+        label: "应用id"
+      }),
+      new TableColumnModel({
+        prop: "prop",
+        label: "名称"
+      }),
+      new TableColumnModel({
+        prop: "label",
+        label: "标题"
+      }),
+      new TableColumnModel({
+        prop: "type",
+        label: "类型",
+        dict: DictNameEnum.FORM_FIELD_TYPE
+      }),
+      new TableColumnModel({
+        prop: "disable",
+        label: "是否禁用",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "hidden",
+        label: "是否隐藏",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "labelWidth",
+        label: "标题宽度"
+      }),
+      new TableColumnModel({
+        prop: "spanCol",
+        label: "占有行数"
+      }),
+      new TableColumnModel({
+        prop: "placeholder",
+        label: "placeholder"
+      }),
+      new TableColumnModel({
+        prop: "required",
+        label: "是否必填",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "showMessage",
+        label: "是否显示校验错误信息",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "inlineMessage",
+        label: "是否inline形式显示校验错误信息",
+        dict: DictNameEnum.BOOLEAN
+      }),
+      new TableColumnModel({
+        prop: "prefix",
+        label: "前置图标"
+      }),
+      new TableColumnModel({
+        prop: "suffix",
+        label: "后置图标"
+      }),
+      new TableColumnModel({
+        prop: "prepend",
+        label: "前置插槽"
+      }),
+      new TableColumnModel({
+        prop: "append",
+        label: "后置插槽"
       })
     ]
   });
@@ -123,8 +256,7 @@ const sysUser = (): TableModel => {
       }),
       new TableColumnModel({
         prop: "userCardId",
-        label: "证件号码",
-        dict: DictNameEnum.USE_STATE
+        label: "证件号码"
       }),
       new TableColumnModel({
         prop: "userUseState",
@@ -220,4 +352,4 @@ const sysPost = (): TableModel => {
   });
 };
 
-export { sysDict, tenantInfo, sysDept, sysUser, sysRole, sysPost };
+export { sysDict, sysFormField, sysForm, tenantInfo, sysDept, sysUser, sysRole, sysPost };

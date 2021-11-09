@@ -4,23 +4,38 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import { testForm, toFormValue } from "@/constants/data/form-data";
+import { defineComponent, ref, Ref } from "vue";
+import { FormModel } from "@/model/entity/FormModel";
+import { dataService } from "@/services/data-service";
+import { FormNameEnum } from "@/constants/enum/form-name.enum";
 
 export default defineComponent({
   name: "FormTest",
   setup(prop) {
-    const formConfig = reactive(testForm());
-    const formInfo: any = toFormValue(formConfig);
+    const formConfig: Ref<FormModel | undefined> = ref(undefined);
+    const formInfo: Ref<any> = ref(undefined as any);
+    dataService
+      .getFormByName([
+        {
+          name: FormNameEnum.testForm,
+          config: formConfig,
+          info: formInfo
+        }
+      ])
+      .then(res => {
+        if (res) {
+          console.log("表单加载成功");
+        }
+      });
 
     const changeEvent = (newV: any, prop: string) => {
       console.log("changeEvent", newV, prop);
     };
     const blurEvent = (field: any) => {
-      console.log("blurEvent", field, formInfo[field.prop]);
+      console.log("blurEvent", field, formInfo.value[field.prop]);
     };
     const focusEvent = (field: any) => {
-      console.log("focusEvent", field, formInfo[field.prop]);
+      console.log("focusEvent", field, formInfo.value[field.prop]);
     };
     const inputEvent = (newV: any, prop: string) => {
       console.log("inputEvent", newV, prop);
@@ -29,8 +44,8 @@ export default defineComponent({
       console.log("validate", val, val2, val3);
     };
     const disable = () => {
-      formConfig.setDisable("name", !formConfig.getDisable("name"));
-      console.log(formConfig.getDisable("name"));
+      formConfig.value?.setDisable("name", !formConfig.value.getDisable("name"));
+      console.log(formConfig.value?.getDisable("name"));
     };
     return {
       formConfig,

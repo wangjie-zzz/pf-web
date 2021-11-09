@@ -14,23 +14,23 @@ class AuthApi extends BaseApi {
       authorize: {
         url: "http://localhost:8401/pf-auth/oauth/authorize", // TODO href 地址
         // url: this.getUrlNotPrefix() + "/oauth/authorize", // TODO href 地址
-        method: MethodTypeEnum.GET.code,
-        header: HeaderTypeEnum.BASE.code
+        method: MethodTypeEnum.GET,
+        header: HeaderTypeEnum.BASE
       },
       callback: {
         url: this.getUrlNotPrefix() + "/oauth/callback",
-        method: MethodTypeEnum.POST.code,
-        header: HeaderTypeEnum.BASE.code
+        method: MethodTypeEnum.POST,
+        header: HeaderTypeEnum.BASE
       },
       logout: {
         url: this.getUrlNotPrefix() + "/logout",
-        method: MethodTypeEnum.GET.code,
-        header: HeaderTypeEnum.AUTH.code
+        method: MethodTypeEnum.GET,
+        header: HeaderTypeEnum.AUTH
       },
       refreshToken: {
         url: this.getUrlNotPrefix() + "/sso/refreshToken",
-        method: MethodTypeEnum.POST.code,
-        header: HeaderTypeEnum.AUTH.code
+        method: MethodTypeEnum.POST,
+        header: HeaderTypeEnum.AUTH
       }
     };
   }

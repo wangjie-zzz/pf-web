@@ -1,6 +1,5 @@
 import { SysDict } from "@/model/SysDict";
 import { Options } from "@/model/entity/FormModel";
-import { UseStateEnum } from "@/constants/enum/use-state.enum";
 import { authService } from "@/services/auth-service";
 import { DictNameEnum } from "@/constants/enum/dict-name.enum";
 /*
@@ -18,6 +17,18 @@ export function useDict() {
     }
     return String(code);
   };
+  const convertAllOptions = (): Options[] => {
+    const options: any[] = [];
+    authService.getDict().map(d1 => {
+      if (options.findIndex(opt => opt.key === d1.dictField) === -1) {
+        options.push({
+          key: d1.dictField,
+          value: d1.dictName
+        });
+      }
+    });
+    return options;
+  };
   const convertOptions = (dict: DictNameEnum): Options[] => {
     if (!dict) return [];
     return authService
@@ -27,9 +38,9 @@ export function useDict() {
         return {
           key: Number(d1.dictKey),
           value: d1.dictValue,
-          disabled: d1.dictUseState !== UseStateEnum.VAILD.code
+          disabled: false // !isValid(d1.useState) TODO 后端不会返回useState了，全部为有效状态
         };
       });
   };
-  return { convertDict, convertOptions };
+  return { convertDict, convertOptions, convertAllOptions };
 }

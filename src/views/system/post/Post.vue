@@ -50,11 +50,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, Ref, ref } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 import { usePost } from "@/views/system/post/use-post";
 import { sysPost } from "@/constants/data/table-data";
-import { sysPostForm, toFormValue } from "@/constants/data/form-data";
 import { useNotice } from "@/components/element-plus/notice";
+import { FormModel } from "@/model/entity/FormModel";
+import { dataService } from "@/services/data-service";
+import { FormNameEnum } from "@/constants/enum/form-name.enum";
+
 export default defineComponent({
   name: "Post",
   setup() {
@@ -63,8 +66,18 @@ export default defineComponent({
     const postConfig = sysPost();
     const postData: Ref<any[]> = ref([]);
     const postFormRef = ref(null);
-    const postFormConfig = reactive(sysPostForm());
-    const postInfo = toFormValue(postFormConfig);
+    const postFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const postInfo: Ref<any> = ref(null as any);
+    dataService
+      .getFormByName([
+        {
+          name: FormNameEnum.sysPostForm,
+          config: postFormConfig,
+          info: postInfo
+        }
+      ])
+      .then(res => {});
+
     const refreshPost = () => {
       list().then(res => {
         postData.value = res;

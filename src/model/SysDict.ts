@@ -8,5 +8,5 @@ export interface SysDict {
   dictKey: number;
   dictValue: string;
   dictSortNo: number;
-  dictUseState: number;
+  useState: number;
 }

@@ -12,6 +12,11 @@ export const pageConfigRouter: Array<RouteRecordRaw> = [
         component: () => import(/* webpackChunkName: "PageConfig" */ "@/views/page-config/form/FormConfig.vue")
       },
       {
+        path: "create-form",
+        name: "CreateFormConfig",
+        component: () => import(/* webpackChunkName: "PageConfig" */ "@/views/page-config/form/CreateFormConfig.vue")
+      },
+      {
         path: "table",
         name: "TableConfig",
         component: () => import(/* webpackChunkName: "PageConfig" */ "@/views/page-config/table/TableConfig.vue")

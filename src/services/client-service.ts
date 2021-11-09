@@ -8,7 +8,7 @@ import { authApi } from "@/constants/api/auth-api";
 import { authService } from "@/services/auth-service";
 
 class ClientService extends HeaderService {
-  private fetch0(path: string, method: string = MethodTypeEnum.GET.code, param: any, requestConfig: RequestInit): Promise<any> {
+  private fetch0(path: string, method: MethodTypeEnum = MethodTypeEnum.GET, param: any, requestConfig: RequestInit): Promise<any> {
     if (typeof param === "object") param = JSON.stringify(param);
     return fetch(path, {
       method: method,
@@ -27,10 +27,10 @@ class ClientService extends HeaderService {
     const path = api.url;
     let requestConfig: RequestInit;
     switch (api.header) {
-      case HeaderTypeEnum.BASE.code:
+      case HeaderTypeEnum.BASE:
         requestConfig = this.createBasicHeaders();
         break;
-      case HeaderTypeEnum.AUTH.code:
+      case HeaderTypeEnum.AUTH:
         requestConfig = this.createAuthHeaders();
         break;
       default:
@@ -39,7 +39,7 @@ class ClientService extends HeaderService {
 
     return this.fetch(path, api.method, requestConfig, query, params);
   }
-  fetch<T>(path: string, method: string, requestConfig: RequestInit, query?: any, params?: any): Promise<T> {
+  fetch<T>(path: string, method: MethodTypeEnum, requestConfig: RequestInit, query?: any, params?: any): Promise<T> {
     path = this.urlQueryConvert(path, query);
     return this.fetch0(path, method, params, requestConfig)
       .then(response => {

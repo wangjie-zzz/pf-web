@@ -35,11 +35,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, Ref, ref } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 import { sysRole } from "@/constants/data/table-data";
-import { sysRoleForm, toFormValue } from "@/constants/data/form-data";
 import { useRole } from "@/views/system/role/use-role";
 import { useNotice } from "@/components/element-plus/notice";
+import { FormModel } from "@/model/entity/FormModel";
+import { dataService } from "@/services/data-service";
+import { FormNameEnum } from "@/constants/enum/form-name.enum";
+
 export default defineComponent({
   name: "Role",
   setup() {
@@ -48,8 +51,10 @@ export default defineComponent({
     const roleConfig = sysRole();
     const roleData: Ref<any[]> = ref([]);
     const roleFormRef = ref(null);
-    const roleFormConfig = reactive(sysRoleForm());
-    const roleInfo = toFormValue(roleFormConfig);
+    const roleFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const roleInfo: Ref<any> = ref(null as any);
+
+    dataService.getFormByName([{ name: FormNameEnum.sysRoleForm, config: roleFormConfig, info: roleInfo }]).then(res => {});
     const refreshRole = () => {
       roleList().then(res => {
         roleData.value = res;

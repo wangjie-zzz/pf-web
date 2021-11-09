@@ -3,16 +3,16 @@ import { useDict } from "@/constants/util/dict-convert";
 import { DictNameEnum } from "@/constants/enum/dict-name.enum";
 
 export const FormTypeEnum = {
-  INPUT: { code: "1", name: "输入框" },
-  NUMBER: { code: "2", name: "数字框" },
-  SELECT: { code: "3", name: "下拉选择框" },
-  CHECKBOX: { code: "4", name: "多选框" },
-  RADIO: { code: "5", name: "单选框" },
-  TEXTAREA: { code: "6", name: "文本" },
-  DATE: { code: "7", name: "日期" },
-  TIME: { code: "8", name: "时间" },
-  DATETIME: { code: "9", name: "日期时间" },
-  CASCADER: { code: "10", name: "级联选择" }
+  INPUT: { code: 1, name: "输入框" },
+  NUMBER: { code: 2, name: "数字框" },
+  SELECT: { code: 3, name: "下拉选择框" },
+  CHECKBOX: { code: 4, name: "多选框" },
+  RADIO: { code: 5, name: "单选框" },
+  TEXTAREA: { code: 6, name: "文本" },
+  DATE: { code: 7, name: "日期" },
+  TIME: { code: 8, name: "时间" },
+  DATETIME: { code: 9, name: "日期时间" },
+  CASCADER: { code: 10, name: "级联选择" }
 };
 
 export class FormModel {
@@ -71,7 +71,7 @@ export class FormModel {
   /*
    * 设置全部字段是否编辑状态
    * */
-  setAllDisable(disable?: boolean): void {
+  setAllDisable(disable: boolean): void {
     if (this.fields && this.fields.length) {
       this.fields.forEach(f => {
         f.disable = disable;
@@ -94,7 +94,7 @@ export class FormModel {
   /*
    * 设置某字段是否编辑状态
    * */
-  setDisable(prop: string, disable?: boolean): void {
+  setDisable(prop: string, disable: boolean): void {
     const f = this.fields.find(f => f.prop === prop);
     if (f) f.disable = disable;
   }
@@ -162,7 +162,7 @@ export interface Options {
 const { convertOptions } = useDict();
 export class FormFieldModel {
   prop: string;
-  type: string;
+  type: number;
   value?: any;
   dict?: DictNameEnum;
   /*cascader/select 是否可以清空输入值*/
@@ -176,17 +176,17 @@ export class FormFieldModel {
   // remoteMethod?: boolean;
   collapseTags: boolean; /*select 多选时开启折叠tag*/
   showAllLevels: boolean; /*cascader-select 输入框中是否显示选中值的完整路径*/
-  label?: string;
-  labelWidth?: string;
-  spanCol?: number;
-  disable?: boolean;
+  label: string;
+  labelWidth: string;
+  spanCol: number;
+  disable: boolean;
   hidden: boolean;
   placeholder?: string;
   options?: Options[];
-  required?: boolean; /*必填，如不设置，则会根据校验规则自动生成 false*/
-  showMessage?: boolean; /*显示校验错误信息 true*/
-  inlineMessage?: boolean; /*inline形式显示校验信息 false*/
-  showPassword?: boolean;
+  required: boolean; /*必填，如不设置，则会根据校验规则自动生成 false*/
+  showMessage: boolean; /*显示校验错误信息 true*/
+  inlineMessage: boolean; /*inline形式显示校验信息 false*/
+  showPassword: boolean;
   prefix?: string; /*头部图标*/
   suffix?: string; /*尾部图标*/
   prepend?: string; /*前缀插槽名称*/
@@ -211,7 +211,7 @@ export class FormFieldModel {
     spanCol?: number;
     disable?: boolean;
     hidden?: boolean;
-    type?: string;
+    type?: number;
     dict?: DictNameEnum;
     value?: any;
     options?: Options[];
@@ -226,9 +226,9 @@ export class FormFieldModel {
     rules?: RuleItem[];
   }) {
     this.prop = param.prop;
-    this.label = param.label;
-    this.labelWidth = param.labelWidth;
-    this.spanCol = param.spanCol;
+    this.label = param.label || "";
+    this.labelWidth = param.labelWidth || "80px";
+    this.spanCol = param.spanCol || 1;
     this.multiple = param.multiple || false;
     this.clearable = param.clearable || false;
     this.filterable = param.filterable || false;
@@ -238,17 +238,17 @@ export class FormFieldModel {
     // remoteMethod?: boolean;
     this.collapseTags = param.collapseTags || false;
     this.showAllLevels = param.showAllLevels || false;
-    this.disable = param.disable;
+    this.disable = param.disable || false;
     this.hidden = param.hidden || false;
     this.placeholder = param.placeholder;
     this.type = param.type || FormTypeEnum.INPUT.code;
     this.dict = param.dict;
     this.value = param.value;
     this.options = param.options && param.options.length ? param.options : this.dict ? convertOptions(this.dict) : [];
-    this.required = param.required;
-    this.showMessage = param.showMessage;
-    this.inlineMessage = param.inlineMessage;
-    this.showPassword = param.showPassword;
+    this.required = param.required || false;
+    this.showMessage = param.showMessage || true;
+    this.inlineMessage = param.inlineMessage || false;
+    this.showPassword = param.showPassword || false;
     this.prefix = param.prefix;
     this.suffix = param.suffix;
     this.prepend = param.prepend;

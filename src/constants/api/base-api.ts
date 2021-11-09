@@ -1,12 +1,13 @@
-import { Constants } from "@/constants/constants";
+import { HeaderTypeEnum } from "@/constants/enum/header-type.enum";
+import { MethodTypeEnum } from "@/constants/enum/method-type.enum";
 
 export type Api = {
   [key: string]: ApiDetail;
 };
 export type ApiDetail = {
   url: string;
-  method: string;
-  header: string;
+  method: MethodTypeEnum;
+  header: HeaderTypeEnum;
 };
 const ProjectUrl = {
   "pf-gateway": process.env.VUE_APP_BASE_URL,

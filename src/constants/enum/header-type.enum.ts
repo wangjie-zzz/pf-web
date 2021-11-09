@@ -1,5 +1,5 @@
-const HeaderTypeEnum = {
-  BASE: { code: "base", name: "BASE" },
-  AUTH: { code: "auth", name: "AUTH" }
-};
+enum HeaderTypeEnum {
+  BASE = "base",
+  AUTH = "auth"
+}
 export { HeaderTypeEnum };
