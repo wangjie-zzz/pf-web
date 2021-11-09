@@ -9,7 +9,7 @@ import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { FormFieldModel, FormModel, Options } from "@/model/entity/FormModel";
 import { SysFormField } from "@/model/entity/SysFormField";
 import { isTrue } from "@/constants/enum/bool.enum";
-import { isNull } from "@/constants/util/objects-utils";
+import { isNull, isNullAndNotZero } from "@/constants/util/objects-utils";
 import { useDict } from "@/constants/util/dict-convert";
 import { Ref } from "vue";
 interface FormServiceModel {
@@ -111,7 +111,13 @@ class DataService {
       value = {};
     }
     form.fields.forEach(f => {
-      if (!value[f.prop] && value[f.prop] !== 0) value[f.prop] = f.value;
+      if (isNullAndNotZero(value[f.prop])) {
+        if (!isNull(f.dict)) {
+          value[f.prop] = Number(f.value); // 字典的默认值需要转number，后端存放的是String
+        } else {
+          value[f.prop] = f.value;
+        }
+      }
     });
     return value;
   }

@@ -61,6 +61,7 @@ import { SysFormInfo } from "@/model/entity/SysFormInfo";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { SysFormField } from "@/model/entity/SysFormField";
+import { copy } from "@/constants/util/objects-utils";
 
 export default defineComponent({
   name: "CreateFormConfig",
@@ -94,6 +95,7 @@ export default defineComponent({
     dataService.getFormByName(params).then(res => {
       if (res) {
         fieldFConfig.value?.setOptions("dict", convertAllOptions());
+        console.log(formInfo.value);
       }
     });
 
@@ -149,7 +151,9 @@ export default defineComponent({
     };
     const confirmCreate = () => {
       loading.open();
-      clientService.general(systemApi.formConfigApi.updateFormField, undefined, fieldInfo.value).then(res => {
+      const param = copy(fieldInfo.value);
+      param.formId = formInfo.value.formId;
+      clientService.general(systemApi.formConfigApi.updateFormField, undefined, param).then(res => {
         loading.close();
         if (res.code === Constants.CODE.SUCCESS) {
           message.success(res.message);

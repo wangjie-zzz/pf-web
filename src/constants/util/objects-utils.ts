@@ -12,7 +12,9 @@ const isNull = (obj: any): boolean => {
   }
   return false;
 };
-
+const isNullAndNotZero = (obj: any): boolean => {
+  return isNull(obj) && obj !== 0;
+};
 const copy = <T>(obj: T): T => {
   return JSON.parse(JSON.stringify(obj));
 };
@@ -25,4 +27,4 @@ const parse = <T>(obj: string): T | undefined => {
   return JSON.parse(JSON.stringify(obj));
 };
 
-export { isNull, copy, stringify, parse };
+export { isNull, copy, stringify, parse, isNullAndNotZero };
