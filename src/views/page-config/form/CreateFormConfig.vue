@@ -184,6 +184,7 @@ export default defineComponent({
     const handleClick = (data: SysFormField, cmd: string) => {
       switch (cmd) {
         case "edit":
+          // 修改操作 需要将fieldId 赋值
           fieldInfo.value = data;
           show.value = true;
           break;
