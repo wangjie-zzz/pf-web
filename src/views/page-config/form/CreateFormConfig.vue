@@ -179,7 +179,7 @@ export default defineComponent({
             formInfo.value = res.data.form;
             fieldList.value = res.data.fields;
             isSave.value = true;
-            // formFConfig.value?.setFormDisable();
+            formFConfig.value.setFormDisable();
           } else {
             message.error(res.message);
           }
