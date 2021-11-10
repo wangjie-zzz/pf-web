@@ -152,7 +152,8 @@ export class FormModel {
     }
   }
 }
-export const emptyForm = new FormModel({ name: "" }); // TODO 页面挂载前，将null 或 undefined 传入<form>时，会有问题：showMessage
+// TODO 页面挂载前，将null 或 undefined 传入<form>时，会有问题：因为对象新增的属性，是没有响应式的
+export const emptyForm = new FormModel({ name: "" });
 export interface Options {
   key: string | number;
   value: string;

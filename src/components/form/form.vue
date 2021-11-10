@@ -2,7 +2,17 @@
   <form class="el-form pf-flex pf-flex-wrap" :class="[config.labelPosition ? 'el-form--label-' + config.labelPosition : '', { 'el-form--inline': config.inline }]">
     <template v-for="field in config.fields" :key="field.prop">
       <template v-if="!field.hidden">
-        <el-form-item :style="calcWidth(field)" :prop="field.prop" :label="field.label" :label-width="field.labelWidth" :rules="field.rules">
+        <el-form-item
+          :style="calcWidth(field)"
+          :prop="field.prop"
+          :show-message="field.showMessage"
+          :inline-message="field.inlineMessage"
+          :label="field.label"
+          :label-width="field.labelWidth"
+          :rules="field.rules"
+        >
+          <!--:size="" 以form为准-->
+          <!--:error="" 统一移至rules-->
           <!--:required="field.required" 统一移至rules-->
           <template v-if="!config.disabled">
             <el-input
