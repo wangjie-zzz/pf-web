@@ -12,6 +12,10 @@ import { isTrue } from "@/constants/enum/bool.enum";
 import { isNull, isNullAndNotZero } from "@/constants/util/objects-utils";
 import { useDict } from "@/constants/util/dict-convert";
 import { Ref } from "vue";
+import { SysTableField } from "@/model/entity/SysTableField";
+import { TableColumnModel, TableModel } from "@/model/entity/TabelModel";
+import { SysTableInfo } from "@/model/entity/SysTableInfo";
+
 interface FormServiceModel {
   name: FormNameEnum;
   config: Ref<FormModel | undefined>;
@@ -120,6 +124,47 @@ class DataService {
       }
     });
     return value;
+  }
+  private toTableFieldModel(obj: SysTableField): TableColumnModel {
+    return new TableColumnModel({
+      prop: obj.prop,
+      label: obj.label,
+      dict: obj.dict,
+      type: useDict().convertDict(DictNameEnum.TABLE_FIELD_TYPE, obj.type),
+      reserveSelection: isTrue(obj.reserveSelection),
+      columnKey: obj.columnKey,
+      width: obj.width,
+      minWidth: obj.minWidth,
+      fixed: isTrue(obj.fixed),
+      sortable: isTrue(obj.sortable),
+      sortBy: obj.sortBy,
+      // sortOrders: obj.sortOrders, TODO 默认
+      resizable: isTrue(obj.resizable),
+      showOverflowTooltip: isTrue(obj.showOverflowTooltip),
+      align: useDict().convertDict(DictNameEnum.TABLE_FIELD_ALIGN, obj.align),
+      headerAlign: useDict().convertDict(DictNameEnum.TABLE_FIELD_ALIGN, obj.headerAlign)
+    });
+  }
+  toTableModel(obj: SysTableInfo): TableModel {
+    return new TableModel({
+      name: obj.name,
+      showPage: isTrue(obj.showPage),
+
+      height: obj.height,
+      maxHeight: obj.maxHeight,
+      stripe: isTrue(obj.stripe),
+      border: isTrue(obj.border),
+      size: useDict().convertDict(DictNameEnum.UI_SIZE, obj.size),
+      fit: isTrue(obj.fit),
+      showHeader: isTrue(obj.showHeader),
+      highlightCurrentRow: isTrue(obj.highlightCurrentRow),
+      rowKey: obj.rowKey,
+      emptyText: obj.emptyText,
+      showSummary: isTrue(obj.showSummary),
+      sumText: obj.sumText,
+      selectOnIndeterminate: isTrue(obj.selectOnIndeterminate),
+      columns: obj.fieldDtos.map(field => this.toTableFieldModel(field))
+    });
   }
 }
 export const dataService = new DataService();
