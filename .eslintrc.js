@@ -14,6 +14,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": ["off"],
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-var-requires": 0,
+    "no-use-before-define": ["warn", { "functions": true, "classes": true }],
     "prettier/prettier": [
       "error",
       {
