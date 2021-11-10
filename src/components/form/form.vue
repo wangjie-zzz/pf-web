@@ -401,7 +401,7 @@ export default defineComponent({
     );
     const calcWidth = computed(() => {
       return (f: any) => {
-        console.log(f);
+        // console.log(f);
         let wd = 50;
         const spanCol = f.spanCol > 0 ? f.spanCol : 1;
         if (!isNaN(props.colCount)) {
