@@ -4,11 +4,9 @@ import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
 
 export const useTenant = () => {
-  const { message, loading } = useNotice();
+  const { message } = useNotice();
   const list = (): Promise<any[]> => {
-    loading.open();
     return clientService.general<any[]>(systemApi.tenantApi.list).then(res => {
-      loading.close();
       if (res.code === Constants.CODE.SUCCESS) {
         return res.data;
       } else {
@@ -18,9 +16,7 @@ export const useTenant = () => {
     });
   };
   const update = (body: any): Promise<boolean> => {
-    loading.open();
     return clientService.general(systemApi.tenantApi.update, undefined, body).then(res => {
-      loading.close();
       if (res.code !== Constants.CODE.SUCCESS) {
         message.error(res.message);
       }
@@ -28,9 +24,7 @@ export const useTenant = () => {
     });
   };
   const deleteTen = (body: string[]): Promise<boolean> => {
-    loading.open();
     return clientService.general(systemApi.tenantApi.delete, undefined, body).then(res => {
-      loading.close();
       if (res.code !== Constants.CODE.SUCCESS) {
         message.error(res.message);
       }

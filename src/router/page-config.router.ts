@@ -14,7 +14,15 @@ export const pageConfigRouter: Array<RouteRecordRaw> = [
       {
         path: "create-form",
         name: "CreateFormConfig",
-        component: () => import(/* webpackChunkName: "PageConfig" */ "@/views/page-config/form/CreateFormConfig.vue")
+        component: () => import(/* webpackChunkName: "PageConfig" */ "@/views/page-config/form/CreateFormConfig.vue"),
+        meta: { name: "创建表单", menuId: "form" },
+        props: true /*route => {
+          const params: any = {};
+          Object.keys(route.query).forEach(key => {
+            params[key] = route.query[key];
+          });
+          return params;
+        }*/
       },
       {
         path: "table",

@@ -178,7 +178,6 @@ class SystemApi extends BaseApi {
       }
     };
     this.formConfigApi = {
-      // TODO
       cacheList: {
         url: this.getUrl() + "/sysFormInfo/cacheList",
         method: MethodTypeEnum.POST,
@@ -199,11 +198,16 @@ class SystemApi extends BaseApi {
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
-      createFormField: {
-        url: this.getUrl() + "/sysFormInfo/createFormField",
+      createByTable: {
+        url: this.getUrl() + "/sysFormInfo/createByTable",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
+      /*createFormField: { // 用于form-data.ts的数据导入
+        url: this.getUrl() + "/sysFormInfo/createFormField",
+        method: MethodTypeEnum.POST,
+        header: HeaderTypeEnum.AUTH
+      },*/
       updateFormField: {
         url: this.getUrl() + "/sysFormInfo/updateFormField",
         method: MethodTypeEnum.POST,

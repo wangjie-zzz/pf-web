@@ -9,7 +9,7 @@
       </el-select>
     </div>
     <div class="">
-      <el-table class="pf-mt-20" :config="fieldConfig" :data="fieldList"> </el-table>
+      <el-table class="pf-mt-20" :config="fieldConfig" :data="fieldList" @select="select" @select-all="selectAll" @selection-change="selectionChange"> </el-table>
     </div>
     <template #footer>
       <div class="pf-text-right">
@@ -21,10 +21,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, toRef, ref, Ref } from "vue";
+import { defineComponent, toRefs, ref, Ref } from "vue";
 import { Options } from "@/model/entity/FormModel";
 import { TableModel } from "@/model/entity/TabelModel";
-import { sysForm, tableField } from "@/constants/data/table-data";
+import { tableField } from "@/constants/data/table-data";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
@@ -38,6 +38,10 @@ export default defineComponent({
       default: () => {
         return false;
       }
+    },
+    formId: {
+      type: String,
+      default: ""
     }
   },
   emits: ["close"],
@@ -78,7 +82,10 @@ export default defineComponent({
     };
     const initTbCols = () => {
       clientService
-        .general<any[]>(systemApi.metadataApi.getTableNamesByDbAndTb, { dbName: db.value, tbName: tb.value })
+        .general<any[]>(systemApi.metadataApi.getTableNamesByDbAndTb, {
+          dbName: db.value,
+          tbName: tb.value
+        })
         .then(res => {
           if (res.code === Constants.CODE.SUCCESS) {
             fieldList.value = res.data;
@@ -90,14 +97,47 @@ export default defineComponent({
     const fieldConfig: Ref<TableModel> = ref(tableField());
     fieldConfig.value.checkbox();
     const fieldList: Ref<any[]> = ref([]);
+    const selectedFieldList: Ref<any[]> = ref([]);
+    const selectionChange = (selection: any[]) => {
+      selectedFieldList.value = selection;
+    };
+    const select = (selection: any[], row: any) => {
+      // console.log(selection, row);
+    };
+    const selectAll = (selection: any[]) => {
+      // console.log(selection);
+    };
+
     const showSelf = propRef.show;
     const closeSelf = () => {
       emit("close");
     };
     const confirm = () => {
-      emit("close");
+      clientService.general(systemApi.formConfigApi.createByTable, { formId: propRef.formId.value, appId: Constants.DEFAULT_APP_ID }, selectedFieldList.value).then(res => {
+        if (res.code === Constants.CODE.SUCCESS) {
+          useNotice().message.success(res.message);
+          emit("close");
+        } else {
+          useNotice().message.error(res.message);
+        }
+      });
     };
-    return { closeSelf, confirm, showSelf, dbs, tbs, db, tb, fieldConfig, fieldList, initTbs, initTbCols };
+    return {
+      closeSelf,
+      confirm,
+      showSelf,
+      dbs,
+      tbs,
+      db,
+      tb,
+      fieldConfig,
+      fieldList,
+      initTbs,
+      initTbCols,
+      selectionChange,
+      select,
+      selectAll
+    };
   }
 });
 </script>

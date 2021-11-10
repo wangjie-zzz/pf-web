@@ -51,7 +51,7 @@
         </div>
       </template>
     </el-dialog>
-    <import-for-db :show="importDbShow" @close="closeImportDbDialog"></import-for-db>
+    <import-for-db :show="importDbShow" :form-id="formInfo.formId" @close="closeImportDbDialog"></import-for-db>
   </pf-main>
 </template>
 
@@ -63,7 +63,6 @@ import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import PfMain from "@/components/layout/PfMain.vue";
-import { useRoute } from "vue-router";
 import { useDict } from "@/constants/util/dict-convert";
 import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { SysFormInfo } from "@/model/entity/SysFormInfo";
@@ -76,8 +75,13 @@ import ImportForDb from "@/views/page-config/form/dialog/ImportForDb.vue";
 export default defineComponent({
   name: "CreateFormConfig",
   components: { PfMain, ImportForDb },
-  setup() {
-    const route = useRoute();
+  props: {
+    name: {
+      type: String,
+      default: ""
+    }
+  },
+  setup(props) {
     const { convertAllOptions } = useDict();
     const { message, loading } = useNotice();
 
@@ -99,12 +103,11 @@ export default defineComponent({
     const saveForm = () => {
       (formFDom.value as any).validate((val: boolean) => {
         if (val) {
-          loading.open();
           clientService.general(systemApi.formConfigApi.createForm, undefined, formInfo.value).then(res => {
-            loading.close();
             if (res.code === Constants.CODE.SUCCESS) {
               message.success(res.message);
               isSave.value = true;
+              refresh();
             } else {
               message.error(res.message);
             }
@@ -117,11 +120,9 @@ export default defineComponent({
       show.value = true;
     };
     const confirmCreate = () => {
-      loading.open();
       const param = copy(fieldInfo.value);
       param.formId = formInfo.value.formId;
       clientService.general(systemApi.formConfigApi.updateFormField, undefined, param).then(res => {
-        loading.close();
         if (res.code === Constants.CODE.SUCCESS) {
           message.success(res.message);
           show.value = false;
@@ -170,11 +171,9 @@ export default defineComponent({
     };
 
     const init = (name: string) => {
-      loading.open();
       clientService
         .general<any>(systemApi.formConfigApi.formInfo, { name })
         .then(res => {
-          loading.close();
           if (res.code === Constants.CODE.SUCCESS) {
             formInfo.value = res.data.form;
             fieldList.value = res.data.fields;
@@ -201,8 +200,8 @@ export default defineComponent({
       dataService.getFormByName(params).then(res => {
         if (res) {
           fieldFConfig.value?.setOptions("dict", convertAllOptions());
-          if (route.query && route.query.name) {
-            init(route.query.name as string);
+          if (props.name) {
+            init(props.name);
           }
         }
       });

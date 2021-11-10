@@ -39,14 +39,12 @@ import { FormModel } from "@/model/entity/FormModel";
 export default defineComponent({
   name: "FormConfig",
   setup() {
-    const { message, loading } = useNotice();
+    const { message } = useNotice();
     const formConfig = sysForm();
     const formList: Ref<any[]> = ref([]);
     const show: Ref<boolean> = ref(false);
     const select = () => {
-      loading.open();
       clientService.general<any[]>(systemApi.formConfigApi.list).then(res => {
-        loading.close();
         if (res.code === Constants.CODE.SUCCESS) {
           formList.value = res.data;
         } else {
@@ -59,7 +57,7 @@ export default defineComponent({
       //TODO
     };
     const create = () => {
-      router.push({ path: "/main/page-config/create-form" });
+      router.push({ name: "CreateFormConfig" });
     };
     const del = () => {
       // systemApi.dictApi.delete
@@ -69,7 +67,7 @@ export default defineComponent({
       switch (cmd) {
         case "edit":
           if (data.name) {
-            router.push({ path: "/main/page-config/create-form", query: { name: data.name } });
+            router.push({ name: "CreateFormConfig", params: { name: data.name } });
           }
           break;
         case "preview":

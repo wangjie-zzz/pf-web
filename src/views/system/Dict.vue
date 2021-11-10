@@ -48,7 +48,7 @@ import { FormNameEnum } from "@/constants/enum/form-name.enum";
 export default defineComponent({
   name: "Dict",
   setup() {
-    const { message, loading } = useNotice();
+    const { message } = useNotice();
     const dictConfig = sysDict();
     const dictData: Ref<SysDict[]> = ref([]);
     const show: Ref<boolean> = ref(false);
@@ -67,9 +67,7 @@ export default defineComponent({
       .then(res => {});
 
     const select = () => {
-      loading.open();
       clientService.general<SysDict[]>(systemApi.dictApi.list).then(res => {
-        loading.close();
         if (res.code === Constants.CODE.SUCCESS) {
           dictData.value = res.data;
         } else {
@@ -88,9 +86,7 @@ export default defineComponent({
     const confirmCreate = () => {
       (dictForm.value as any).validate((val: boolean) => {
         if (val) {
-          loading.open();
           clientService.general(systemApi.dictApi.update, undefined, formInfo.value).then(res => {
-            loading.close();
             if (res.code === Constants.CODE.SUCCESS) {
               show.value = false;
               select();

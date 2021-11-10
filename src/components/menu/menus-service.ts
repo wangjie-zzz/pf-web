@@ -136,6 +136,7 @@ class MenusService {
     return res;
   }
   refreshCrumbs(route: RouteLocationNormalizedLoaded, crumbs: Crumb[]): string {
+    // TODO fullPath携带get参数，不同的get参数会有两个crumb
     const c = crumbs.find(c => c.path === route.fullPath);
     if (c) {
       c.params = route.params;

@@ -6,6 +6,7 @@ import { CommonResult } from "@/model/CommonResult";
 import { ApiDetail } from "@/constants/api/base-api";
 import { authApi } from "@/constants/api/auth-api";
 import { authService } from "@/services/auth-service";
+import { useNotice } from "@/components/element-plus/notice";
 
 class ClientService extends HeaderService {
   private fetch0(path: string, method: MethodTypeEnum = MethodTypeEnum.GET, param: any, requestConfig: RequestInit): Promise<any> {
@@ -41,8 +42,11 @@ class ClientService extends HeaderService {
   }
   fetch<T>(path: string, method: MethodTypeEnum, requestConfig: RequestInit, query?: any, params?: any): Promise<T> {
     path = this.urlQueryConvert(path, query);
+    const { loading } = useNotice();
+    loading.open();
     return this.fetch0(path, method, params, requestConfig)
       .then(response => {
+        loading.close();
         if (response.code) {
           // TODO 后端Long的序列化丢失精度问题导致code也返回了string，待优化
           response.code = Number(response.code);
