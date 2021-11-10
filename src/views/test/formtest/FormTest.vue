@@ -5,14 +5,14 @@
 
 <script lang="ts">
 import { defineComponent, ref, Ref } from "vue";
-import { FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 
 export default defineComponent({
   name: "FormTest",
   setup(prop) {
-    const formConfig: Ref<FormModel | undefined> = ref(undefined);
+    const formConfig: Ref<FormModel> = ref(emptyForm);
     const formInfo: Ref<any> = ref(undefined as any);
     dataService
       .getFormByName([

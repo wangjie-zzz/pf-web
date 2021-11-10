@@ -18,7 +18,7 @@ import { SysTableInfo } from "@/model/entity/SysTableInfo";
 
 interface FormServiceModel {
   name: FormNameEnum;
-  config: Ref<FormModel | undefined>;
+  config: Ref<FormModel>;
   info: Ref<any>;
 }
 class DataService {

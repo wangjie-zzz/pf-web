@@ -100,7 +100,7 @@
 import { defineComponent, reactive, Ref, ref, watch } from "vue";
 import { TNode, useOrg } from "@/views/system/org/use-org";
 import { useTenant } from "@/views/system/tenant/use-tenant";
-import { FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { sysDept, sysUser } from "@/constants/data/table-data";
 import { useNotice } from "@/components/element-plus/notice";
 import { dataService } from "@/services/data-service";
@@ -117,7 +117,7 @@ export default defineComponent({
 
     const show = ref(false);
     const compForm = ref(null);
-    const compFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const compFormConfig: Ref<FormModel> = ref(emptyForm);
     const compInfo: Ref<any> = ref(null as any);
 
     const refreshComp = () => {
@@ -155,7 +155,7 @@ export default defineComponent({
     const userConfig = sysUser();
     const userData: Ref<any[]> = ref([]);
     const userFormRef = ref(null);
-    const userFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const userFormConfig: Ref<FormModel> = ref(emptyForm);
     const userInfo: Ref<any> = ref(null as any);
     const refreshUser = () => {
       userList(activeNode.value.id, activeNode.value.isCom).then(res => {
@@ -194,7 +194,7 @@ export default defineComponent({
     const deptConfig = sysDept();
     const deptData: Ref<any[]> = ref([]);
     const deptFormRef = ref(null);
-    const deptFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const deptFormConfig: Ref<FormModel> = ref(emptyForm);
     const deptInfo: Ref<any> = ref(null as any);
     const refreshDept = () => {
       deptList(activeNode.value.id, activeNode.value.isCom).then(res => {

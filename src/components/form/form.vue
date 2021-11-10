@@ -203,7 +203,7 @@ import { defineComponent, provide, watch, ref, computed, reactive, toRefs, toRef
 import mitt from "mitt";
 import { elFormKey, ElFormItemContext as FormItemCtx, elFormEvents, ValidateFieldCallback, ComponentSize } from "./token";
 import { FieldErrorList } from "async-validator";
-import { FormTypeEnum } from "@/model/entity/FormModel";
+import { FormModel, FormTypeEnum } from "@/model/entity/FormModel";
 import ElFormItem from "@/components/form/form-item.vue";
 import { useDict } from "@/constants/util/dict-convert";
 
@@ -259,7 +259,7 @@ export default defineComponent({
       }
     },
     config: {
-      type: Object,
+      type: FormModel,
       required: true,
       default: () => {
         return {};

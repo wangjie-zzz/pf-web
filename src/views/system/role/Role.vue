@@ -39,7 +39,7 @@ import { defineComponent, Ref, ref } from "vue";
 import { sysRole } from "@/constants/data/table-data";
 import { useRole } from "@/views/system/role/use-role";
 import { useNotice } from "@/components/element-plus/notice";
-import { FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 
@@ -51,7 +51,7 @@ export default defineComponent({
     const roleConfig = sysRole();
     const roleData: Ref<any[]> = ref([]);
     const roleFormRef = ref(null);
-    const roleFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const roleFormConfig: Ref<FormModel> = ref(emptyForm);
     const roleInfo: Ref<any> = ref(null as any);
 
     dataService.getFormByName([{ name: FormNameEnum.sysRoleForm, config: roleFormConfig, info: roleInfo }]).then(res => {});

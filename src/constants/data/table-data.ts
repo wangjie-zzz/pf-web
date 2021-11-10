@@ -42,6 +42,50 @@ const sysDict = (): TableModel => {
     ]
   });
 };
+const tableField = (): TableModel => {
+  return new TableModel({
+    name: "tableField",
+    showPage: false,
+    columns: [
+      new TableColumnModel({
+        prop: "tableSchema",
+        label: "数据源名"
+      }),
+      new TableColumnModel({
+        prop: "tableName",
+        label: "数据表名"
+      }),
+      new TableColumnModel({
+        prop: "isNullable",
+        label: "是否为null"
+      }),
+      new TableColumnModel({
+        prop: "dataType",
+        label: "数据类型"
+      }),
+      new TableColumnModel({
+        prop: "columnName",
+        label: "字段名"
+      }),
+      new TableColumnModel({
+        prop: "columnKey",
+        label: "主键"
+      }),
+      new TableColumnModel({
+        prop: "columnDefault",
+        label: "默认值"
+      }),
+      new TableColumnModel({
+        prop: "columnType",
+        label: "字段类型"
+      }),
+      new TableColumnModel({
+        prop: "columnComment",
+        label: "字段注释"
+      })
+    ]
+  });
+};
 const sysForm = (): TableModel => {
   return new TableModel({
     name: "sysForm",
@@ -352,4 +396,4 @@ const sysPost = (): TableModel => {
   });
 };
 
-export { sysDict, sysFormField, sysForm, tenantInfo, sysDept, sysUser, sysRole, sysPost };
+export { sysDict, sysFormField, sysForm, tenantInfo, sysDept, sysUser, sysRole, sysPost, tableField };

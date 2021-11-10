@@ -39,7 +39,7 @@ import { SysDict } from "@/model/SysDict";
 import { useTenant } from "@/views/system/tenant/use-tenant";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "@/model/entity/FormModel";
 
 export default defineComponent({
   name: "Tenant",
@@ -49,7 +49,7 @@ export default defineComponent({
     const dictData: Ref<any[]> = ref([]);
 
     const show: Ref<boolean> = ref(false);
-    const formConfig: Ref<FormModel | undefined> = ref(undefined);
+    const formConfig: Ref<FormModel> = ref(emptyForm);
     const tenForm = ref(null);
     const formInfo: Ref<SysDict> = ref(null as any);
     dataService.getFormByName([{ name: FormNameEnum.tenantForm, config: formConfig, info: formInfo }]).then(res => {});

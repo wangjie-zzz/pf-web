@@ -7,9 +7,17 @@
       <el-button icon="el-icon-refresh" v-if="isSave" @click="refresh"></el-button>
       <el-button type="primary" v-if="!isSave" @click="saveForm">保存</el-button>
       <el-button type="primary" v-if="isSave" @click="create">创建</el-button>
-      <el-button type="primary" v-if="isSave" @click="importDB">导入数据表</el-button>
+      <el-button
+        type="primary"
+        v-if="isSave"
+        @click="
+          () => {
+            importDbShow = true;
+          }
+        "
+        >导入数据表</el-button
+      >
       <el-button v-if="isSave" @click="del">删除</el-button>
-      <el-button type="primary" v-if="isSave" @click="setCache">重置缓存</el-button>
       <el-button type="primary" v-if="isSave" @click="preview">预览</el-button>
     </div>
     <el-table class="pf-mt-20" :config="fieldTConfig" :data="fieldList">
@@ -26,7 +34,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="表单项" v-model="show">
+    <el-dialog :width="'80%'" title="表单项" v-model="show">
       <el-form ref="fieldFDom" :config="fieldFConfig" :model="fieldInfo" :col-count="3"></el-form>
       <template #footer>
         <div class="pf-text-right">
@@ -35,19 +43,20 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog title="表单预览" v-model="previewShow">
-      <el-form ref="fieldFDom" :config="previewFormConfig" :model="previewInfo" :col-count="3"></el-form>
+    <el-dialog :width="'80%'" title="表单预览" v-model="previewShow">
+      <el-form :config="previewFormConfig" :model="previewInfo" :col-count="3"></el-form>
       <template #footer>
         <div class="pf-text-right">
           <el-button type="primary" @click="previewOver">确认</el-button>
         </div>
       </template>
     </el-dialog>
+    <import-for-db :show="importDbShow" @close="closeImportDbDialog"></import-for-db>
   </pf-main>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import { defineComponent, ref, Ref, onMounted } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
 import { sysFormField } from "@/constants/data/table-data";
 import { clientService } from "@/services/client-service";
@@ -56,16 +65,17 @@ import { Constants } from "@/constants/constants";
 import PfMain from "@/components/layout/PfMain.vue";
 import { useRoute } from "vue-router";
 import { useDict } from "@/constants/util/dict-convert";
-import { FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { SysFormInfo } from "@/model/entity/SysFormInfo";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { SysFormField } from "@/model/entity/SysFormField";
 import { copy } from "@/constants/util/objects-utils";
+import ImportForDb from "@/views/page-config/form/dialog/ImportForDb.vue";
 
 export default defineComponent({
   name: "CreateFormConfig",
-  components: { PfMain },
+  components: { PfMain, ImportForDb },
   setup() {
     const route = useRoute();
     const { convertAllOptions } = useDict();
@@ -73,66 +83,19 @@ export default defineComponent({
 
     const isSave: Ref<boolean> = ref(false);
     const formFDom = ref(null);
-    const formFConfig: Ref<FormModel | undefined> = ref(undefined);
-    const formInfo: Ref<SysFormInfo> = ref(null as any);
+    const formFConfig: Ref<FormModel> = ref(emptyForm);
+    const formInfo: Ref<SysFormInfo> = ref({} as any);
 
     const show: Ref<boolean> = ref(false);
     const fieldFDom = ref(null);
-    const fieldFConfig: Ref<FormModel | undefined> = ref(undefined);
+    const fieldFConfig: Ref<FormModel> = ref(emptyForm);
     const fieldInfo: Ref<SysFormField> = ref(null as any);
-    const params = [
-      {
-        name: FormNameEnum.sysFieldForm,
-        config: fieldFConfig,
-        info: fieldInfo
-      },
-      {
-        name: FormNameEnum.sysFormForm,
-        config: formFConfig,
-        info: formInfo
-      }
-    ];
-    dataService.getFormByName(params).then(res => {
-      if (res) {
-        fieldFConfig.value?.setOptions("dict", convertAllOptions());
-        console.log(formInfo.value);
-      }
-    });
-
-    const fieldTConfig = sysFormField();
-    const fieldList: Ref<SysFormField[]> = ref([]);
 
     const previewShow: Ref<boolean> = ref(false);
     const previewFormConfig: Ref<FormModel> = ref({} as FormModel);
     const previewInfo: Ref<any> = ref(null);
-    const init = (name: string) => {
-      loading.open();
-      clientService
-        .general<any>(systemApi.formConfigApi.formInfo, { name })
-        .then(res => {
-          loading.close();
-          if (res.code === Constants.CODE.SUCCESS) {
-            formInfo.value = res.data.form;
-            fieldList.value = res.data.fields;
-            isSave.value = true;
-          } else {
-            message.error(res.message);
-          }
-        });
-    };
-    const refresh = () => {
-      init(formInfo.value.name);
-    };
-    if (route.query && route.query.name) {
-      init(route.query.name as string);
-    }
-    const setCache = () => {
-      // TODO
-    };
-    const create = () => {
-      fieldInfo.value = dataService.toFormValue(fieldFConfig.value as any);
-      show.value = true;
-    };
+
+    /*列表上方按钮方法*/
     const saveForm = () => {
       (formFDom.value as any).validate((val: boolean) => {
         if (val) {
@@ -149,6 +112,10 @@ export default defineComponent({
         }
       });
     };
+    const create = () => {
+      fieldInfo.value = dataService.toFormValue(fieldFConfig.value as any);
+      show.value = true;
+    };
     const confirmCreate = () => {
       loading.open();
       const param = copy(fieldInfo.value);
@@ -164,8 +131,8 @@ export default defineComponent({
         }
       });
     };
-    const importDB = () => {
-      // TODO
+    const refresh = () => {
+      init(formInfo.value.name);
     };
     const del = () => {
       // systemApi.dictApi.delete
@@ -181,6 +148,15 @@ export default defineComponent({
     const previewOver = () => {
       previewShow.value = false;
     };
+
+    /*导入数据库表信息*/
+    const importDbShow: Ref<boolean> = ref(false);
+    const closeImportDbDialog = () => {
+      importDbShow.value = false;
+    };
+    /*表单列，列表信息*/
+    const fieldTConfig = sysFormField();
+    const fieldList: Ref<SysFormField[]> = ref([]);
     const handleClick = (data: SysFormField, cmd: string) => {
       switch (cmd) {
         case "edit":
@@ -192,6 +168,46 @@ export default defineComponent({
           message.error("未定义的操作！");
       }
     };
+
+    const init = (name: string) => {
+      loading.open();
+      clientService
+        .general<any>(systemApi.formConfigApi.formInfo, { name })
+        .then(res => {
+          loading.close();
+          if (res.code === Constants.CODE.SUCCESS) {
+            formInfo.value = res.data.form;
+            fieldList.value = res.data.fields;
+            isSave.value = true;
+            // formFConfig.value?.setFormDisable();
+          } else {
+            message.error(res.message);
+          }
+        });
+    };
+    const params = [
+      {
+        name: FormNameEnum.sysFieldForm,
+        config: fieldFConfig,
+        info: fieldInfo
+      },
+      {
+        name: FormNameEnum.sysFormForm,
+        config: formFConfig,
+        info: formInfo
+      }
+    ];
+    onMounted(() => {
+      dataService.getFormByName(params).then(res => {
+        if (res) {
+          fieldFConfig.value?.setOptions("dict", convertAllOptions());
+          if (route.query && route.query.name) {
+            init(route.query.name as string);
+          }
+        }
+      });
+    });
+
     return {
       refresh,
       fieldList,
@@ -201,7 +217,6 @@ export default defineComponent({
       confirmCreate,
       del,
       create,
-      setCache,
       formFDom,
       formFConfig,
       formInfo,
@@ -209,7 +224,8 @@ export default defineComponent({
       fieldFDom,
       fieldFConfig,
       fieldInfo,
-      importDB,
+      importDbShow,
+      closeImportDbDialog,
       show,
       preview,
       previewShow,

@@ -41,7 +41,7 @@ import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
 import { SysDict } from "@/model/SysDict";
 import { authService } from "@/services/auth-service";
-import { FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 
@@ -53,7 +53,7 @@ export default defineComponent({
     const dictData: Ref<SysDict[]> = ref([]);
     const show: Ref<boolean> = ref(false);
 
-    const formConfig: Ref<FormModel | undefined> = ref(undefined);
+    const formConfig: Ref<FormModel> = ref(emptyForm);
     const formInfo: Ref<SysDict> = ref(null as any);
     const dictForm = ref(null);
     dataService

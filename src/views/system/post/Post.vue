@@ -54,7 +54,7 @@ import { defineComponent, Ref, ref } from "vue";
 import { usePost } from "@/views/system/post/use-post";
 import { sysPost } from "@/constants/data/table-data";
 import { useNotice } from "@/components/element-plus/notice";
-import { FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 
@@ -66,7 +66,7 @@ export default defineComponent({
     const postConfig = sysPost();
     const postData: Ref<any[]> = ref([]);
     const postFormRef = ref(null);
-    const postFormConfig: Ref<FormModel | undefined> = ref(undefined);
+    const postFormConfig: Ref<FormModel> = ref(emptyForm);
     const postInfo: Ref<any> = ref(null as any);
     dataService
       .getFormByName([

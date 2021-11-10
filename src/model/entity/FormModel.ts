@@ -1,6 +1,7 @@
 import { RuleItem } from "async-validator";
 import { useDict } from "@/constants/util/dict-convert";
 import { DictNameEnum } from "@/constants/enum/dict-name.enum";
+import { isNull } from "@/constants/util/objects-utils";
 
 export const FormTypeEnum = {
   INPUT: { code: 1, name: "输入框" },
@@ -14,7 +15,6 @@ export const FormTypeEnum = {
   DATETIME: { code: 9, name: "日期时间" },
   CASCADER: { code: 10, name: "级联选择" }
 };
-
 export class FormModel {
   name: string;
   fields: FormFieldModel[];
@@ -65,8 +65,8 @@ export class FormModel {
   /*
    * 设置整体是否编辑状态
    * */
-  setFormEdit(disable?: boolean): void {
-    this.disabled = disable || false;
+  setFormDisable(disable?: boolean): void {
+    this.disabled = isNull(disable) ? true : (disable as boolean);
   }
   /*
    * 设置全部字段是否编辑状态
@@ -152,6 +152,7 @@ export class FormModel {
     }
   }
 }
+export const emptyForm = new FormModel({ name: "" }); // TODO 页面挂载前，将null 或 undefined 传入<form>时，会有问题：showMessage
 export interface Options {
   key: string | number;
   value: string;
