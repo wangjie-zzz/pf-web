@@ -82,7 +82,7 @@ export default defineComponent({
       authService.setDict(dictData.value);
     };
     const create = () => {
-      formInfo.value = dataService.toFormValue(formConfig as any);
+      formInfo.value = dataService.toFormValue(formConfig.value as any);
       show.value = true;
     };
     const confirmCreate = () => {
