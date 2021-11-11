@@ -1,7 +1,9 @@
 <template>
-  <h1>欢迎来到工作台！！！</h1>
-  <el-button @click="menuList">menuList</el-button>
-  <el-button @click="access">access auth</el-button>
+  <div>
+    <h1>欢迎来到工作台！！！</h1>
+    <el-button @click="menuList">menuList</el-button>
+    <el-button @click="access">access auth</el-button>
+  </div>
 </template>
 
 <script lang="ts">
