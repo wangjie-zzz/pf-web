@@ -30,6 +30,13 @@ export const pageConfigRouter: Array<RouteRecordRaw> = [
         component: () => import(/* webpackChunkName: "PageConfig" */ "@/views/page-config/table/TableConfig.vue")
       },
       {
+        path: "create-table",
+        name: "CreateTableConfig",
+        component: () => import(/* webpackChunkName: "PageConfig" */ "@/views/page-config/table/CreateTableConfig.vue"),
+        meta: { name: "创建表格", menuId: "table" },
+        props: true
+      },
+      {
         path: "layout",
         name: "LayoutConfig",
         component: () => import(/* webpackChunkName: "PageConfig" */ "@/views/page-config/layout/LayoutConfig.vue")

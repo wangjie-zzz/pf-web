@@ -73,7 +73,7 @@ import { copy } from "@/constants/util/objects-utils";
 import ImportForDb from "@/views/page-config/dialog/ImportForDb.vue";
 
 export default defineComponent({
-  name: "CreateFormConfig",
+  name: "CreateTableConfig",
   components: { PfMain, ImportForDb },
   props: {
     name: {
