@@ -8,7 +8,7 @@ import { SysFormInfo } from "@/model/entity/SysFormInfo";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { FormFieldModel, FormModel, Options } from "@/model/entity/FormModel";
 import { SysFormField } from "@/model/entity/SysFormField";
-import { isTrue } from "@/constants/enum/bool.enum";
+import { isTrue } from "@/constants/enum/dicts/bool.enum";
 import { isNull, isNullAndNotZero } from "@/constants/util/objects-utils";
 import { useDict } from "@/constants/util/dict-convert";
 import { Ref } from "vue";
