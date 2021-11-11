@@ -29,6 +29,7 @@ import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
+import { isNull } from "@/constants/util/objects-utils";
 
 export default defineComponent({
   name: "ImportForDb",
@@ -113,6 +114,10 @@ export default defineComponent({
       emit("close");
     };
     const confirm = () => {
+      if (isNull(selectedFieldList.value)) {
+        useNotice().message.error("请选择数据！");
+        return;
+      }
       clientService.general(systemApi.formConfigApi.createByTable, { formId: propRef.formId.value, appId: Constants.DEFAULT_APP_ID }, selectedFieldList.value).then(res => {
         if (res.code === Constants.CODE.SUCCESS) {
           useNotice().message.success(res.message);
