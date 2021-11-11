@@ -3,7 +3,7 @@
     <div class="pf-mt-20 pf-text-left">
       <el-button icon="el-icon-refresh" @click="select"></el-button>
       <el-button type="primary" @click="create">创建</el-button>
-      <el-button type="primary" @click="setCache">重置缓存</el-button>
+      <!--      <el-button type="primary" @click="setCache">重置缓存</el-button>-->
       <el-button @click="del">删除</el-button>
       <!--      <el-button @click="initData">init</el-button>-->
     </div>
@@ -40,7 +40,7 @@ export default defineComponent({
   name: "FormConfig",
   setup() {
     const { message } = useNotice();
-    const formConfig = sysForm();
+    const formConfig = sysForm().checkbox();
     const formList: Ref<any[]> = ref([]);
     const show: Ref<boolean> = ref(false);
     const select = () => {
@@ -53,14 +53,14 @@ export default defineComponent({
       });
     };
     select();
-    const setCache = () => {
-      //TODO
-    };
+    /*const setCache = () => {
+    };*/
     const create = () => {
       router.push({ name: "CreateFormConfig" });
     };
     const del = () => {
       // systemApi.dictApi.delete
+      // TODO
       message.error("待完善");
     };
     const handleClick = (data: FormModel, cmd: string) => {
@@ -86,7 +86,7 @@ export default defineComponent({
       handleClick,
       create,
       del,
-      setCache,
+      // setCache,
       show
       // initData
     };
