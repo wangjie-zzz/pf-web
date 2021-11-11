@@ -1,4 +1,5 @@
 import { DictNameEnum } from "@/constants/enum/dict-name.enum";
+import { FormModel } from "@/model/entity/FormModel";
 
 export const TableTypeEnum = {
   selection: { code: "selection", name: "" },
@@ -83,6 +84,8 @@ export class TableModel {
   }
 }
 
+// TODO 页面挂载前，将null 或 undefined 传入<form>时，会有问题：因为对象新增的属性，是没有响应式的
+export const emptyTable = new TableModel({ name: "", columns: [] });
 export class TableColumnModel {
   prop: string; /*也可以使用 property 属性	*/
   label: string;

@@ -21,15 +21,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, ref, Ref } from "vue";
+import { defineComponent, onMounted, Ref, ref, toRefs } from "vue";
 import { Options } from "@/model/entity/FormModel";
-import { TableModel } from "@/model/entity/TabelModel";
-import { tableField } from "@/constants/data/table-data";
+import { emptyTable, TableModel } from "@/model/entity/TabelModel";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
 import { isNull } from "@/constants/util/objects-utils";
+import { ApiDetail } from "@/constants/api/base-api";
+import { dataService } from "@/services/data-service";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
   name: "ImportForDb",
@@ -43,10 +45,19 @@ export default defineComponent({
     formId: {
       type: String,
       default: ""
+    },
+    tableId: {
+      type: String,
+      default: ""
     }
   },
   emits: ["close"],
   setup(props, { emit }) {
+    onMounted(() => {
+      dataService.loadTable([{ name: TableNameEnum.tableField, config: fieldConfig }]).then(res => {
+        fieldConfig.value.checkbox();
+      });
+    });
     const propRef = toRefs(props);
 
     const db: Ref<string> = ref("");
@@ -95,8 +106,7 @@ export default defineComponent({
           }
         });
     };
-    const fieldConfig: Ref<TableModel> = ref(tableField());
-    fieldConfig.value.checkbox();
+    const fieldConfig: Ref<TableModel> = ref(emptyTable);
     const fieldList: Ref<any[]> = ref([]);
     const selectedFieldList: Ref<any[]> = ref([]);
     const selectionChange = (selection: any[]) => {
@@ -118,7 +128,16 @@ export default defineComponent({
         useNotice().message.error("请选择数据！");
         return;
       }
-      clientService.general(systemApi.formConfigApi.createByTable, { formId: propRef.formId.value, appId: Constants.DEFAULT_APP_ID }, selectedFieldList.value).then(res => {
+      let queryParams;
+      let api: ApiDetail;
+      if (!isNull(propRef.formId.value)) {
+        queryParams = { formId: propRef.formId.value, appId: Constants.DEFAULT_APP_ID };
+        api = systemApi.formConfigApi.createByTable;
+      } else {
+        api = systemApi.tableConfigApi.createByTable;
+        queryParams = { tableId: propRef.tableId.value, appId: Constants.DEFAULT_APP_ID };
+      }
+      clientService.general(api, queryParams, selectedFieldList.value).then(res => {
         if (res.code === Constants.CODE.SUCCESS) {
           useNotice().message.success(res.message);
           emit("close");

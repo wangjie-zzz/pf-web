@@ -7,7 +7,7 @@
       <el-button @click="del">删除</el-button>
       <!--      <el-button @click="initData">init</el-button>-->
     </div>
-    <el-table class="pf-mt-20" :config="formConfig" :data="formList">
+    <el-table class="pf-mt-20" :config="tableConfig" :data="tableList">
       <el-table-column label="操作" fixed="right" width="80">
         <template #default="scope">
           <el-tooltip effect="light" placement="left" trigger="hover">
@@ -25,34 +25,42 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { sysForm } from "@/constants/data/table-data";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
-import { authService } from "@/services/auth-service";
 import router from "@/router";
-// import { init } from "@/views/page-config/form/init-basedata";
 import { FormModel } from "@/model/entity/FormModel";
+import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { dataService } from "@/services/data-service";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
+// import { init } from "@/views/page-config/test/init-basedata";
 
 export default defineComponent({
   name: "TableConfig",
   setup() {
+    onMounted(() => {
+      dataService.loadTable([{ name: TableNameEnum.sysTable, config: tableConfig }]).then(res => {
+        if (res) {
+          tableConfig.value.checkbox();
+          select();
+        }
+      });
+    });
     const { message } = useNotice();
-    const formConfig = sysForm().checkbox();
-    const formList: Ref<any[]> = ref([]);
+    const tableConfig: Ref<TableModel> = ref(emptyTable);
+    const tableList: Ref<any[]> = ref([]);
     const show: Ref<boolean> = ref(false);
     const select = () => {
-      clientService.general<any[]>(systemApi.formConfigApi.list).then(res => {
+      clientService.general<any[]>(systemApi.tableConfigApi.list).then(res => {
         if (res.code === Constants.CODE.SUCCESS) {
-          formList.value = res.data;
+          tableList.value = res.data;
         } else {
           message.error(res.message);
         }
       });
     };
-    select();
     /*const setCache = () => {
     };*/
     const create = () => {
@@ -81,8 +89,8 @@ export default defineComponent({
     };*/
     return {
       select,
-      formList,
-      formConfig,
+      tableList,
+      tableConfig,
       handleClick,
       create,
       del,

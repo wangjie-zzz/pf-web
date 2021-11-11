@@ -25,22 +25,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { sysForm } from "@/constants/data/table-data";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
-import { authService } from "@/services/auth-service";
 import router from "@/router";
 // import { init } from "@/views/page-config/form/init-basedata";
 import { FormModel } from "@/model/entity/FormModel";
+import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { dataService } from "@/services/data-service";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
   name: "FormConfig",
   setup() {
     const { message } = useNotice();
-    const formConfig = sysForm().checkbox();
+    const formConfig: Ref<TableModel> = ref(emptyTable);
     const formList: Ref<any[]> = ref([]);
     const show: Ref<boolean> = ref(false);
     const select = () => {
@@ -52,7 +53,6 @@ export default defineComponent({
         }
       });
     };
-    select();
     /*const setCache = () => {
     };*/
     const create = () => {
@@ -76,6 +76,14 @@ export default defineComponent({
           message.error("未定义的操作！");
       }
     };
+    onMounted(() => {
+      dataService.loadTable([{ name: TableNameEnum.sysForm, config: formConfig }]).then(res => {
+        if (res) {
+          formConfig.value.checkbox();
+          select();
+        }
+      });
+    });
     /*const initData = () => {
       init();
     };*/

@@ -10,6 +10,7 @@ class SystemApi extends BaseApi {
   dictApi: Api = {};
   metadataApi: Api = {};
   formConfigApi: Api = {};
+  tableConfigApi: Api = {};
   menuApi: Api = {};
   roleApi: Api = {};
   postApi: Api = {};
@@ -210,6 +211,44 @@ class SystemApi extends BaseApi {
       },*/
       updateFormField: {
         url: this.getUrl() + "/sysFormInfo/updateFormField",
+        method: MethodTypeEnum.POST,
+        header: HeaderTypeEnum.AUTH
+      }
+    };
+    this.tableConfigApi = {
+      cacheList: {
+        url: this.getUrl() + "/sysTableInfo/cacheList",
+        method: MethodTypeEnum.POST,
+        header: HeaderTypeEnum.AUTH
+      },
+      list: {
+        url: this.getUrl() + "/sysTableInfo/list",
+        method: MethodTypeEnum.GET,
+        header: HeaderTypeEnum.AUTH
+      },
+      info: {
+        url: this.getUrl() + "/sysTableInfo/info",
+        method: MethodTypeEnum.GET,
+        header: HeaderTypeEnum.AUTH
+      },
+      create: {
+        url: this.getUrl() + "/sysTableInfo/create",
+        method: MethodTypeEnum.POST,
+        header: HeaderTypeEnum.AUTH
+      },
+      createByTable: {
+        url: this.getUrl() + "/sysTableInfo/createByTable",
+        method: MethodTypeEnum.POST,
+        header: HeaderTypeEnum.AUTH
+      },
+      createField: {
+        // 用于table-data.ts的数据导入
+        url: this.getUrl() + "/sysTableInfo/createField",
+        method: MethodTypeEnum.POST,
+        header: HeaderTypeEnum.AUTH
+      },
+      updateField: {
+        url: this.getUrl() + "/sysTableInfo/updateField",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       }

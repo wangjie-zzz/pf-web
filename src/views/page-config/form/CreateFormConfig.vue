@@ -56,9 +56,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, onMounted } from "vue";
+import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { sysFormField } from "@/constants/data/table-data";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
@@ -71,6 +70,8 @@ import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { SysFormField } from "@/model/entity/SysFormField";
 import { copy } from "@/constants/util/objects-utils";
 import ImportForDb from "@/views/page-config/dialog/ImportForDb.vue";
+import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
   name: "CreateFormConfig",
@@ -156,7 +157,7 @@ export default defineComponent({
       importDbShow.value = false;
     };
     /*表单列，列表信息*/
-    const fieldTConfig = sysFormField();
+    const fieldTConfig: Ref<TableModel> = ref(emptyTable);
     const fieldList: Ref<SysFormField[]> = ref([]);
     const handleClick = (data: SysFormField, cmd: string) => {
       switch (cmd) {
@@ -184,21 +185,23 @@ export default defineComponent({
           }
         });
     };
-    const params = [
-      {
-        name: FormNameEnum.sysFieldForm,
-        config: fieldFConfig,
-        info: fieldInfo
-      },
-      {
-        name: FormNameEnum.sysFormForm,
-        config: formFConfig,
-        info: formInfo
-      }
-    ];
     onMounted(() => {
-      dataService.getFormByName(params).then(res => {
-        if (res) {
+      Promise.all([
+        dataService.loadTable([{ name: TableNameEnum.sysFormField, config: fieldTConfig }]),
+        dataService.loadForm([
+          {
+            name: FormNameEnum.sysFieldForm,
+            config: fieldFConfig,
+            info: fieldInfo
+          },
+          {
+            name: FormNameEnum.sysFormForm,
+            config: formFConfig,
+            info: formInfo
+          }
+        ])
+      ]).then(ress => {
+        if (ress.findIndex(res => !res) === -1) {
           fieldFConfig.value?.setOptions("dict", convertAllOptions());
           if (props.name) {
             init(props.name);

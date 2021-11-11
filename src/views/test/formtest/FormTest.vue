@@ -15,7 +15,7 @@ export default defineComponent({
     const formConfig: Ref<FormModel> = ref(emptyForm);
     const formInfo: Ref<any> = ref(undefined as any);
     dataService
-      .getFormByName([
+      .loadForm([
         {
           name: FormNameEnum.testForm,
           config: formConfig,

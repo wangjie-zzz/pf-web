@@ -6,4 +6,4 @@ enum UseStateEnum {
 const isValid = (val: number): boolean => {
   return UseStateEnum.VAILD == val;
 };
-export { UseStateEnum, isValid };
+export { isValid };

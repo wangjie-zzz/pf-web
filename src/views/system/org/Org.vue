@@ -97,14 +97,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, Ref, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, Ref, watch } from "vue";
 import { TNode, useOrg } from "@/views/system/org/use-org";
 import { useTenant } from "@/views/system/tenant/use-tenant";
 import { emptyForm, FormModel } from "@/model/entity/FormModel";
-import { sysDept, sysUser } from "@/constants/data/table-data";
 import { useNotice } from "@/components/element-plus/notice";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
+import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
   name: "User",
@@ -126,7 +127,6 @@ export default defineComponent({
         activeNode.value = treeData.value.length > -1 ? treeData.value[0] : ({} as any);
       });
     };
-    refreshComp();
     const createComp = () => {
       list().then(res => {
         show.value = true;
@@ -152,7 +152,7 @@ export default defineComponent({
       });
     };
     const show2 = ref(false);
-    const userConfig = sysUser();
+    const userConfig: Ref<TableModel> = ref(emptyTable);
     const userData: Ref<any[]> = ref([]);
     const userFormRef = ref(null);
     const userFormConfig: Ref<FormModel> = ref(emptyForm);
@@ -191,7 +191,7 @@ export default defineComponent({
     };
 
     const show1 = ref(false);
-    const deptConfig = sysDept();
+    const deptConfig: Ref<TableModel> = ref(emptyTable);
     const deptData: Ref<any[]> = ref([]);
     const deptFormRef = ref(null);
     const deptFormConfig: Ref<FormModel> = ref(emptyForm);
@@ -289,19 +289,28 @@ export default defineComponent({
         );
       }
     };
-    dataService
-      .getFormByName([
-        {
-          name: FormNameEnum.companyForm,
-          config: compFormConfig,
-          info: compInfo
-        },
-        { name: FormNameEnum.deptForm, config: deptFormConfig, info: deptInfo },
-        { name: FormNameEnum.sysUserForm, config: userFormConfig, info: userInfo }
-      ])
-      .then(res => {
-        console.log(deptFormConfig.value);
+    onMounted(() => {
+      Promise.all([
+        dataService.loadForm([
+          {
+            name: FormNameEnum.companyForm,
+            config: compFormConfig,
+            info: compInfo
+          },
+          { name: FormNameEnum.deptForm, config: deptFormConfig, info: deptInfo },
+          { name: FormNameEnum.sysUserForm, config: userFormConfig, info: userInfo }
+        ]),
+        dataService.loadTable([
+          { name: TableNameEnum.sysDept, config: deptConfig },
+          { name: TableNameEnum.sysUser, config: userConfig }
+        ])
+      ]).then(ress => {
+        if (ress.findIndex(res => !res) === -1) {
+          refreshComp();
+        }
       });
+    });
+
     return {
       activeTab,
       activeNode,

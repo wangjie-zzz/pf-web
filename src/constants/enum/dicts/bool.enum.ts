@@ -5,4 +5,4 @@ enum BoolEnum {
 const isTrue = (val: number): boolean => {
   return BoolEnum.YES == val;
 };
-export { BoolEnum, isTrue };
+export { isTrue };

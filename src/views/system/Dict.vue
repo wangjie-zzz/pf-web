@@ -33,8 +33,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, reactive } from "vue";
-import { sysDict } from "@/constants/data/table-data";
+import { defineComponent, ref, Ref, onMounted } from "vue";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
@@ -44,27 +43,33 @@ import { authService } from "@/services/auth-service";
 import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
+import { emptyTable, TableModel } from "@/model/entity/TabelModel";
 
 export default defineComponent({
   name: "Dict",
   setup() {
     const { message } = useNotice();
-    const dictConfig = sysDict();
+    const dictConfig: Ref<TableModel> = ref(emptyTable);
     const dictData: Ref<SysDict[]> = ref([]);
     const show: Ref<boolean> = ref(false);
 
     const formConfig: Ref<FormModel> = ref(emptyForm);
     const formInfo: Ref<SysDict> = ref(null as any);
     const dictForm = ref(null);
-    dataService
-      .getFormByName([
+    onMounted(() => {
+      const formPromise = dataService.loadForm([
         {
           name: FormNameEnum.sysDictForm,
           config: formConfig,
           info: formInfo
         }
-      ])
-      .then(res => {});
+      ]);
+      const tablePromise = dataService.loadTable([{ name: TableNameEnum.sysDict, config: dictConfig }]);
+      Promise.all([formPromise, tablePromise]).then((res: boolean[]) => {
+        select();
+      });
+    });
 
     const select = () => {
       clientService.general<SysDict[]>(systemApi.dictApi.list).then(res => {
@@ -75,7 +80,6 @@ export default defineComponent({
         }
       });
     };
-    select();
     const setCache = () => {
       authService.setDict(dictData.value);
     };

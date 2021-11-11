@@ -15,14 +15,21 @@ import { Ref } from "vue";
 import { SysTableField } from "@/model/entity/SysTableField";
 import { TableColumnModel, TableModel } from "@/model/entity/TabelModel";
 import { SysTableInfo } from "@/model/entity/SysTableInfo";
+import { isNormal } from "@/constants/enum/dicts/table-field-type.enum";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 interface FormServiceModel {
   name: FormNameEnum;
   config: Ref<FormModel>;
   info: Ref<any>;
 }
+interface TableServiceModel {
+  name: TableNameEnum;
+  config: Ref<TableModel>;
+  // info: Ref<any>;
+}
 class DataService {
-  getFormByName(forms: FormServiceModel[]): Promise<boolean> {
+  loadForm(forms: FormServiceModel[]): Promise<boolean> {
     if (isNull(forms)) return Promise.resolve(false);
     return clientService
       .general<SysFormInfo[]>(
@@ -54,7 +61,7 @@ class DataService {
         }
       });
   }
-  getDictByField(fields: DictNameEnum[]): Promise<SysDict[]> {
+  loadDict(fields: DictNameEnum[]): Promise<SysDict[]> {
     return clientService.general<SysDict[]>(systemApi.dictApi.cacheList, undefined, fields).then(response => {
       if (response.code === Constants.CODE.SUCCESS) {
         return Promise.resolve(response.data);
@@ -63,6 +70,36 @@ class DataService {
         return Promise.resolve([]);
       }
     });
+  }
+  loadTable(tables: TableServiceModel[]): Promise<boolean> {
+    if (isNull(tables)) return Promise.resolve(false);
+    return clientService
+      .general<SysTableInfo[]>(
+        systemApi.tableConfigApi.cacheList,
+        undefined,
+        tables.map(table => table.name)
+      )
+      .then(response => {
+        if (response.code === Constants.CODE.SUCCESS) {
+          if (!isNull(response.data)) {
+            let res = true;
+            tables.forEach(table => {
+              const sysTableInfo = response.data.find(sysTableInfo => sysTableInfo.name === table.name);
+              if (sysTableInfo) {
+                table.config.value = this.toTableModel(sysTableInfo);
+              } else {
+                table.config.value = {} as any;
+                res = false;
+              }
+            });
+            return Promise.resolve(res);
+          }
+          return Promise.resolve(false);
+        } else {
+          useNotice().message.error(response.message);
+          return Promise.resolve(false);
+        }
+      });
   }
   private toFormFieldModel(obj: SysFormField, options?: Options[]): FormFieldModel {
     return new FormFieldModel({
@@ -102,7 +139,7 @@ class DataService {
       // rules?: RuleItem[];
       labelPosition: useDict().convertDict(DictNameEnum.LABEL_POSITION, obj.labelPosition),
       labelWidth: obj.labelWidth,
-      disabled: isTrue(obj.disable),
+      disabled: isTrue(obj.disabled),
       validateOnRuleChange: isTrue(obj.validateOnRuleChange),
       hideRequiredAsterisk: isTrue(obj.hideRequiredAsterisk),
       showMessage: isTrue(obj.showMessage),
@@ -130,7 +167,7 @@ class DataService {
       prop: obj.prop,
       label: obj.label,
       dict: obj.dict,
-      type: useDict().convertDict(DictNameEnum.TABLE_FIELD_TYPE, obj.type),
+      type: isNormal(obj.type) ? undefined : useDict().convertDict(DictNameEnum.TABLE_FIELD_TYPE, obj.type),
       reserveSelection: isTrue(obj.reserveSelection),
       columnKey: obj.columnKey,
       width: obj.width,

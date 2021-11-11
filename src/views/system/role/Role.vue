@@ -35,32 +35,40 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from "vue";
-import { sysRole } from "@/constants/data/table-data";
+import { defineComponent, onMounted, ref, Ref } from "vue";
 import { useRole } from "@/views/system/role/use-role";
 import { useNotice } from "@/components/element-plus/notice";
 import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
+import { emptyTable } from "@/model/entity/TabelModel";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
   name: "Role",
   setup() {
     const { roleList, addRole } = useRole();
     const show = ref(false);
-    const roleConfig = sysRole();
+    const roleConfig = ref(emptyTable);
     const roleData: Ref<any[]> = ref([]);
     const roleFormRef = ref(null);
     const roleFormConfig: Ref<FormModel> = ref(emptyForm);
     const roleInfo: Ref<any> = ref(null as any);
-
-    dataService.getFormByName([{ name: FormNameEnum.sysRoleForm, config: roleFormConfig, info: roleInfo }]).then(res => {});
+    onMounted(() => {
+      Promise.all([
+        dataService.loadTable([{ name: TableNameEnum.sysRole, config: roleConfig }]),
+        dataService.loadForm([{ name: FormNameEnum.sysRoleForm, config: roleFormConfig, info: roleInfo }])
+      ]).then(ress => {
+        if (ress.findIndex(res => !res) === -1) {
+          refreshRole();
+        }
+      });
+    });
     const refreshRole = () => {
       roleList().then(res => {
         roleData.value = res;
       });
     };
-    refreshRole();
     const createRole = () => {
       show.value = true;
     };

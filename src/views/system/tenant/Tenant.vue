@@ -32,38 +32,46 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from "vue";
+import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { tenantInfo } from "@/constants/data/table-data";
 import { SysDict } from "@/model/SysDict";
 import { useTenant } from "@/views/system/tenant/use-tenant";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { emptyForm, FormModel } from "@/model/entity/FormModel";
+import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
   name: "Tenant",
   setup() {
     const { message } = useNotice();
-    const dictConfig = tenantInfo();
+    const dictConfig: Ref<TableModel> = ref(emptyTable);
     const dictData: Ref<any[]> = ref([]);
 
     const show: Ref<boolean> = ref(false);
     const formConfig: Ref<FormModel> = ref(emptyForm);
     const tenForm = ref(null);
     const formInfo: Ref<SysDict> = ref(null as any);
-    dataService.getFormByName([{ name: FormNameEnum.tenantForm, config: formConfig, info: formInfo }]).then(res => {});
-
+    onMounted(() => {
+      Promise.all([
+        dataService.loadTable([{ name: TableNameEnum.tenantInfo, config: dictConfig }]),
+        dataService.loadForm([{ name: FormNameEnum.tenantForm, config: formConfig, info: formInfo }])
+      ]).then(ress => {
+        if (ress.findIndex(res => !res) === -1) {
+          select();
+        }
+      });
+    });
     const { list, update } = useTenant();
     const select = () => {
       list().then(res => {
         dictData.value = res;
       });
     };
-    select();
 
     const create = () => {
-      formInfo.value = dataService.toFormValue(formConfig as any);
+      formInfo.value = dataService.toFormValue(formConfig.value);
       show.value = true;
     };
     const confirmCreate = () => {

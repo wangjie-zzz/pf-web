@@ -13,11 +13,32 @@
     <form-test></form-test>
     <page></page>
     <el-button @click="getApp">getApp</el-button>
+    <Suspense>
+      <async-test><span>async1</span></async-test>
+    </Suspense>
+    <el-button @click="() => (showAsync2 = !showAsync2)">showOrnoShow Async2</el-button>
+    <async-test2 v-if="showAsync2"><span>async2 </span></async-test2>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, provide, reactive } from "vue";
+import {
+  defineComponent,
+  ref,
+  computed,
+  provide,
+  reactive,
+  onBeforeMount,
+  onMounted,
+  onBeforeUpdate,
+  onUpdated,
+  onBeforeUnmount,
+  onUnmounted,
+  onErrorCaptured,
+  onRenderTracked,
+  onRenderTriggered,
+  defineAsyncComponent
+} from "vue";
 import TestChild from "@/views/test/child/TestChild.vue";
 import RefTest from "@/views/test/RefTest.vue";
 import FormTest from "@/views/test/formtest/FormTest.vue";
@@ -25,6 +46,7 @@ import Page from "@/views/test/Page.vue";
 import FileDialog from "@/components/dialog/FileDialog.vue";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
 
 export default defineComponent({
   name: "Test",
@@ -36,8 +58,49 @@ export default defineComponent({
       }
     };
   },
-  components: { Page, TestChild, RefTest, FormTest },
+  components: {
+    Page,
+    TestChild,
+    RefTest,
+    FormTest,
+    AsyncTest: defineAsyncComponent(() => import("@/views/test/AsyncTest.vue")),
+    AsyncTest2: defineAsyncComponent(() => import("@/views/test/AsyncTest2.vue"))
+  },
   setup() {
+    onBeforeMount(() => {
+      console.log("Test Component is onBeforeMount!");
+    });
+    onMounted(() => {
+      console.log("Test Component is mounted!");
+    });
+    onBeforeUpdate(() => {
+      console.log("Test Component is onBeforeUpdate!");
+    });
+    onUpdated(() => {
+      console.log("Test Component is onUpdated!");
+    });
+    onBeforeUnmount(() => {
+      console.log("Test Component is onBeforeUnmount!");
+    });
+    onUnmounted(() => {
+      console.log("Test Component is onUnmounted!");
+    });
+    onErrorCaptured(() => {
+      console.log("Test Component is onErrorCaptured!");
+    });
+    onRenderTracked(() => {
+      console.log("Test Component is onRenderTracked!");
+    });
+    onRenderTriggered(() => {
+      console.log("Test Component is onRenderTriggered!");
+    });
+    onBeforeRouteLeave((to, from) => {
+      console.log("onBeforeRouteLeave", to, from);
+      return true;
+    });
+    onBeforeRouteUpdate(async (to, from) => {
+      console.log("onBeforeRouteUpdate", to, from);
+    });
     const refObj = ref({ aa: "aa", bb: { bbb: "bbb" } });
     // const refObj = { aa: "aa", bb: { bbb: "bbb" } };
     provide("parent", { aa: "aa" });
@@ -114,6 +177,7 @@ export default defineComponent({
     const pageOpts = reactive([100, 200, 300, 400]);
     const pageSize = ref(100);
     const dataTotal = ref(100);
+    const showAsync2 = ref(false);
     return {
       data,
       activeKey,
@@ -134,7 +198,8 @@ export default defineComponent({
         clientService.general(systemApi.appApi.list).then(res => {
           console.log(res);
         });
-      }
+      },
+      showAsync2
     };
   },
   methods: {

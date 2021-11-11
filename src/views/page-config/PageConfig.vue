@@ -4,10 +4,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "PageConfig"
-};
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "PageConfig",
+  setup() {
+    return {};
+  }
+});
 </script>
 
 <style scoped lang="scss">

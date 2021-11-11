@@ -1,4 +1,6 @@
 export enum FormNameEnum {
+  sysTableForm = "sysTableForm",
+  sysTableFieldForm = "sysTableField",
   sysFormForm = "sysFormForm",
   sysFieldForm = "sysFieldForm",
   sysDictForm = "sysDictForm",

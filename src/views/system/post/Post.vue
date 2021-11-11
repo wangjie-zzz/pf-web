@@ -50,40 +50,46 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from "vue";
+import { defineComponent, onMounted, ref, Ref } from "vue";
 import { usePost } from "@/views/system/post/use-post";
-import { sysPost } from "@/constants/data/table-data";
 import { useNotice } from "@/components/element-plus/notice";
 import { emptyForm, FormModel } from "@/model/entity/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
+import { emptyTable } from "@/model/entity/TabelModel";
+import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
   name: "Post",
   setup() {
     const { list, add, listUser, addUser } = usePost();
     const show = ref(false);
-    const postConfig = sysPost();
+    const postConfig = ref(emptyTable);
     const postData: Ref<any[]> = ref([]);
     const postFormRef = ref(null);
     const postFormConfig: Ref<FormModel> = ref(emptyForm);
     const postInfo: Ref<any> = ref(null as any);
-    dataService
-      .getFormByName([
-        {
-          name: FormNameEnum.sysPostForm,
-          config: postFormConfig,
-          info: postInfo
+    onMounted(() => {
+      Promise.all([
+        dataService.loadTable([{ name: TableNameEnum.sysPost, config: postConfig }]),
+        dataService.loadForm([
+          {
+            name: FormNameEnum.sysPostForm,
+            config: postFormConfig,
+            info: postInfo
+          }
+        ])
+      ]).then(ress => {
+        if (ress.findIndex(res => !res) === -1) {
+          refreshPost();
         }
-      ])
-      .then(res => {});
-
+      });
+    });
     const refreshPost = () => {
       list().then(res => {
         postData.value = res;
       });
     };
-    refreshPost();
     const createPost = () => {
       show.value = true;
     };

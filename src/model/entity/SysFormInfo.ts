@@ -6,7 +6,7 @@ export interface SysFormInfo {
   name: string;
   labelPosition: number;
   labelWidth: string;
-  disable: number;
+  disabled: number;
   validateOnRuleChange: number;
   hideRequiredAsterisk: number;
   showMessage: number;
