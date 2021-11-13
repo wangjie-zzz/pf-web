@@ -35,44 +35,47 @@ import Form from "@/components/form/form.vue";
 import ElTable from "@/components/table/table.vue";
 import ElTableColumn from "@/components/table/table-column/index";
 
-export function elInstall(app: App): App {
-  app.config.globalProperties.$ELEMENT = { size: "small", zIndex: 3000 };
+export default {
+  install(app: App): void {
+    app.config.globalProperties.$ELEMENT = { size: "small", zIndex: 3000 };
 
-  app.component(Form.name, Form);
-  app.component(ElTable.name, ElTable);
-  app.component(ElTableColumn.name, ElTableColumn);
-  return app
-    .use(ElMenu)
-    .use(ElSubmenu)
-    .use(ElMenuItem)
-    .use(ElButton)
-    .use(ElTabs)
-    .use(ElTabPane)
-    .use(ElEmpty)
-    .use(ElPagination as any)
+    app.component(Form.name, Form);
+    app.component(ElTable.name, ElTable);
+    app.component(ElTableColumn.name, ElTableColumn);
 
-    .use(ElInput)
-    .use(ElInputNumber)
-    .use(ElSelect)
-    .use(ElOption as any)
-    .use(ElCascader)
-    .use(ElCheckboxGroup)
-    .use(ElCheckbox)
-    .use(ElRadioGroup)
-    .use(ElRadio)
-    .use(ElDatePicker as any)
-    .use(ElTimePicker as any)
+    app
+      .use(ElMenu)
+      .use(ElSubmenu)
+      .use(ElMenuItem)
+      .use(ElButton)
+      .use(ElTabs)
+      .use(ElTabPane)
+      .use(ElEmpty)
+      .use(ElPagination as any)
 
-    .use(ElScrollbar)
-    .use(ElPopper)
+      .use(ElInput)
+      .use(ElInputNumber)
+      .use(ElSelect)
+      .use(ElOption as any)
+      .use(ElCascader)
+      .use(ElCheckboxGroup)
+      .use(ElCheckbox)
+      .use(ElRadioGroup)
+      .use(ElRadio)
+      .use(ElDatePicker as any)
+      .use(ElTimePicker as any)
 
-    .use(ElTree)
-    .use(ElDropdown)
-    .use(ElDropdownMenu)
-    .use(ElDropdownItem)
-    .use(ElTooltip as any)
-    .use(ElTag)
-    .use(ElDialog)
-    .use(ElSpace)
-    .use(ElTransfer);
-}
+      .use(ElScrollbar)
+      .use(ElPopper)
+
+      .use(ElTree)
+      .use(ElDropdown)
+      .use(ElDropdownMenu)
+      .use(ElDropdownItem)
+      .use(ElTooltip as any)
+      .use(ElTag)
+      .use(ElDialog)
+      .use(ElSpace)
+      .use(ElTransfer);
+  }
+};
