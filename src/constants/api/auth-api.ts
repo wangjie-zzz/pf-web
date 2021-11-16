@@ -6,7 +6,7 @@ import { Api } from "@/model/Api";
 class AuthApi extends BaseApi {
   oauthApi: Api = {};
   constructor() {
-    super("pf-auth");
+    super("pf-auth", process.env.VUE_APP_AUTH_URL);
     this.initPf();
   }
 

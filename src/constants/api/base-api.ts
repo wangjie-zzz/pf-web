@@ -1,11 +1,10 @@
 import { isTrue } from "@/constants/enum/dicts/bool.enum";
 
-const ProjectUrl = {
-  "pf-gateway": process.env.VUE_APP_BASE_URL,
-  "pf-system": process.env.VUE_APP_SYSTEM_URL,
-  "pf-auth": process.env.VUE_APP_AUTH_URL
+type ProjectUrlModel = {
+  [key: string]: string;
 };
 export class BaseApi {
+  private projectUrl: ProjectUrlModel = { "pf-gateway": process.env.VUE_APP_BASE_URL };
   protected baseUrl: string;
   prefix: string;
   permit: string;
@@ -13,9 +12,10 @@ export class BaseApi {
   enableGateway: boolean;
   enableProxy: boolean;
 
-  constructor(project?: string) {
+  constructor(project: string, url: string) {
     this.prefix = process.env.VUE_APP_API_PREFIX || "";
-    this.project = project || "";
+    this.project = project;
+    this.projectUrl[project] = url;
     this.permit = "/permitAll";
     this.baseUrl = "";
     this.enableProxy = isTrue(process.env.VUE_APP_ENABLE_PROXY);
@@ -36,12 +36,12 @@ export class BaseApi {
       // 不开代理
       if (this.enableGateway) {
         // 开启网关
-        this.baseUrl = ProjectUrl["pf-gateway"] || "";
+        this.baseUrl = this.projectUrl["pf-gateway"] || "";
       } else {
         // 不开启网关
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
-        this.baseUrl = ProjectUrl[this.project];
+        this.baseUrl = this.projectUrl[this.project];
       }
     }
   }

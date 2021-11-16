@@ -16,7 +16,7 @@ class SystemApi extends BaseApi {
   roleApi: Api = {};
   postApi: Api = {};
   constructor() {
-    super("pf-system");
+    super("pf-system", process.env.VUE_APP_SYSTEM_URL);
     this.initKm();
   }
 
