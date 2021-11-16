@@ -1,11 +1,12 @@
 <template>
   <el-button @click="disable">disable-name</el-button>
+  <PfTest :title="'self-test: '"><span>i'm pf content </span></PfTest>
   <el-form class="pf-mb-50" :config="formConfig" :model="formInfo" @validate="validate" @blurEvent="blurEvent" @changeEvent="changeEvent" @focusEvent="focusEvent" @inputEvent="inputEvent"></el-form>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
-import { emptyForm, FormModel } from "@/model/entity/FormModel";
+import { defineComponent, ref, Ref, onMounted } from "vue";
+import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 
@@ -24,6 +25,7 @@ export default defineComponent({
       ])
       .then(res => {
         if (res) {
+          console.log(formConfig.value.fields[6]);
           console.log("表单加载成功");
         }
       });

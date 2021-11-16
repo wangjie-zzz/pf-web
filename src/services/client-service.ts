@@ -3,12 +3,16 @@ import { HeaderTypeEnum } from "@/constants/enum/header-type.enum";
 import { HeaderService } from "@/services/header-service";
 import { Constants } from "@/constants/constants";
 import { CommonResult } from "@/model/CommonResult";
-import { ApiDetail } from "@/constants/api/base-api";
 import { authApi } from "@/constants/api/auth-api";
 import { authService } from "@/services/auth-service";
 import { useNotice } from "@/components/element-plus/notice";
+import { ApiDetail } from "@/model/Api";
 
-class ClientService extends HeaderService {
+export class ClientService extends HeaderService {
+  static readonly INSTANCE: ClientService = new ClientService();
+  private constructor() {
+    super();
+  }
   private fetch0(path: string, method: MethodTypeEnum = MethodTypeEnum.GET, param: any, requestConfig: RequestInit): Promise<any> {
     if (typeof param === "object") param = JSON.stringify(param);
     return fetch(path, {
@@ -151,4 +155,4 @@ class ClientService extends HeaderService {
     });
   }
 }
-export const clientService = new ClientService();
+export const clientService = ClientService.INSTANCE;

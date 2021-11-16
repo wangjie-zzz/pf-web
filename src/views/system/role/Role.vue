@@ -38,10 +38,10 @@
 import { defineComponent, onMounted, ref, Ref } from "vue";
 import { useRole } from "@/views/system/role/use-role";
 import { useNotice } from "@/components/element-plus/notice";
-import { emptyForm, FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { emptyTable } from "@/model/entity/TabelModel";
+import { emptyTable } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({

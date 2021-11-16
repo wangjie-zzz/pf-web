@@ -62,14 +62,14 @@ import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import PfMain from "@/components/layout/PfMain.vue";
-import { useDict } from "@/constants/util/dict-convert";
-import { emptyForm, FormModel } from "@/model/entity/FormModel";
+import { useDict } from "pf-component/packages/util/dict-convert";
+import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { copy } from "@/constants/util/objects-utils";
+import { copy } from "pf-component/packages/util/objects-utils";
 import { SysTableInfo } from "@/model/entity/SysTableInfo";
 import { SysTableField } from "@/model/entity/SysTableField";
-import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({

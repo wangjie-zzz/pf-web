@@ -31,7 +31,7 @@
 <script lang="ts">
 import { defineComponent, ref, Ref, computed, inject } from "vue";
 import PfMenu from "@/components/menu/PfMenu.vue";
-import { menusService } from "@/components/menu/menus-service.ts";
+import { menusService } from "@/components/menu/menus-service";
 import { Crumb } from "@/model/Crumb";
 import { useRouter } from "vue-router";
 import { clientService } from "@/services/client-service";

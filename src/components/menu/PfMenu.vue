@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { menusService } from "@/components/menu/menus-service.ts";
+import { menusService } from "@/components/menu/menus-service";
 import { SysMenu } from "@/model/SysMenu";
 
 export default defineComponent({

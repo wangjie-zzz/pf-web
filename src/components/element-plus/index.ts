@@ -31,18 +31,10 @@ import {
   ElCascader
 } from "element-plus";
 import { App } from "vue";
-import Form from "@/components/form/form.vue";
-import ElTable from "@/components/table/table.vue";
-import ElTableColumn from "@/components/table/table-column/index";
 
 export default {
   install(app: App): void {
     app.config.globalProperties.$ELEMENT = { size: "small", zIndex: 3000 };
-
-    app.component(Form.name, Form);
-    app.component(ElTable.name, ElTable);
-    app.component(ElTableColumn.name, ElTableColumn);
-
     app
       .use(ElMenu)
       .use(ElSubmenu)

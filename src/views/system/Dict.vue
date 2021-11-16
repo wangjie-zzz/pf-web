@@ -38,13 +38,14 @@ import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
-import { SysDict } from "@/model/SysDict";
+import { SysDict } from "pf-component/packages/services/model/SysDict";
 import { authService } from "@/services/auth-service";
-import { emptyForm, FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
-import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
+import { useDict } from "pf-component/packages/util/dict-convert";
 
 export default defineComponent({
   name: "Dict",
@@ -81,7 +82,7 @@ export default defineComponent({
       });
     };
     const setCache = () => {
-      authService.setDict(dictData.value);
+      useDict().setDict(dictData.value);
     };
     const create = () => {
       formInfo.value = dataService.toFormValue(formConfig.value as any);

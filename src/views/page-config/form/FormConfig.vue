@@ -32,8 +32,8 @@ import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import router from "@/router";
 // import { init } from "@/views/page-config/form/init-basedata";
-import { FormModel } from "@/model/entity/FormModel";
-import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { FormModel } from "pf-component/packages/services/model/FormModel";
+import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
 import { dataService } from "@/services/data-service";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
 

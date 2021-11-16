@@ -100,11 +100,11 @@
 import { defineComponent, onMounted, ref, Ref, watch } from "vue";
 import { TNode, useOrg } from "@/views/system/org/use-org";
 import { useTenant } from "@/views/system/tenant/use-tenant";
-import { emptyForm, FormModel } from "@/model/entity/FormModel";
+import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
 import { useNotice } from "@/components/element-plus/notice";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({

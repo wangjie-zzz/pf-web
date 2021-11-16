@@ -34,12 +34,12 @@
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { SysDict } from "@/model/SysDict";
+import { SysDict } from "pf-component/packages/services/model/SysDict";
 import { useTenant } from "@/views/system/tenant/use-tenant";
 import { dataService } from "@/services/data-service";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { emptyForm, FormModel } from "@/model/entity/FormModel";
-import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
+import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({

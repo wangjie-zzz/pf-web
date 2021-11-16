@@ -3,7 +3,7 @@ import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
 import { Ref } from "vue";
-import { Options } from "@/model/entity/FormModel";
+import { Options } from "pf-component/packages/services/model/FormModel";
 export type TNode = { supId: string; id: string; name: string; isCom: boolean; leaf: boolean; level: number; children: TNode[] };
 const tNodeToOptions = (nodes: TNode[], isCom?: boolean): Options[] => {
   if (!nodes || nodes.length === 0) return [];

@@ -1,6 +1,7 @@
 import { Constants } from "@/constants/constants";
 import { authService } from "@/services/auth-service";
 export class HeaderService {
+  protected constructor() {}
   createBasicHeaders(): RequestInit {
     return {
       headers: {

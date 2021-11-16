@@ -22,16 +22,16 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref, toRefs } from "vue";
-import { Options } from "@/model/entity/FormModel";
-import { emptyTable, TableModel } from "@/model/entity/TabelModel";
+import { Options } from "pf-component/packages/services/model/FormModel";
+import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
-import { isNull } from "@/constants/util/objects-utils";
-import { ApiDetail } from "@/constants/api/base-api";
+import { isNull } from "pf-component/packages/util/objects-utils";
 import { dataService } from "@/services/data-service";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
+import { ApiDetail } from "@/model/Api";
 
 export default defineComponent({
   name: "ImportForDb",
