@@ -46,7 +46,7 @@ export default defineComponent({
       console.log("validate", val, val2, val3);
     };
     const disable = () => {
-      formConfig.value?.setDisable("name", !formConfig.value.getDisable("name"));
+      formConfig.value.setDisable("name", !formConfig.value.getDisable("name"));
       console.log(formConfig.value?.getDisable("name"));
     };
     return {
