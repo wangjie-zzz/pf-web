@@ -21,13 +21,13 @@ class AuthService {
   }
 
   setCache(token: any) {
+    sessionStorage.setItem(this.TOKEN, token.accessToken);
+    sessionStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
+    sessionStorage.setItem(this.USER, token.jti);
     this.initDict().then(res => {
       if (!res) {
         useNotice().message.error("加载字典失败");
       }
-      sessionStorage.setItem(this.TOKEN, token.accessToken);
-      sessionStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
-      sessionStorage.setItem(this.USER, token.jti);
     });
   }
   clearCache() {
