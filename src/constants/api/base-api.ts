@@ -1,3 +1,5 @@
+import { isTrue } from "@/constants/enum/dicts/bool.enum";
+
 const ProjectUrl = {
   "pf-gateway": process.env.VUE_APP_BASE_URL,
   "pf-system": process.env.VUE_APP_SYSTEM_URL,
@@ -16,8 +18,8 @@ export class BaseApi {
     this.project = project || "";
     this.permit = "/permitAll";
     this.baseUrl = "";
-    this.enableProxy = !!process.env.VUE_APP_ENABLE_PROXY && process.env.VUE_APP_ENABLE_PROXY === "true";
-    this.enableGateway = !!process.env.VUE_APP_ENABLE_GATEWAY && process.env.VUE_APP_ENABLE_GATEWAY === "true";
+    this.enableProxy = isTrue(process.env.VUE_APP_ENABLE_PROXY);
+    this.enableGateway = isTrue(process.env.VUE_APP_ENABLE_GATEWAY);
     this.initBaseUrl();
   }
   initBaseUrl(): void {
