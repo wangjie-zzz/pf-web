@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { menusService } from "@/components/menu/menus-service";
-import { SysMenu } from "@/model/SysMenu";
+import { SysMenu } from "@/model/entity/SysMenu";
 
 export default defineComponent({
   name: "PfMenu",

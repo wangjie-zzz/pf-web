@@ -1,5 +1,5 @@
 import { MenuTypeEnum } from "@/constants/enum/menu-type.enum";
-import { SysMenu } from "@/model/SysMenu";
+import { SysMenu } from "@/model/entity/SysMenu";
 import { Crumb } from "@/model/Crumb";
 import { RouteLocationNormalizedLoaded } from "vue-router";
 import { clientService } from "@/services/client-service";

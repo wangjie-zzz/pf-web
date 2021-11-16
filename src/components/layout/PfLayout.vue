@@ -36,7 +36,7 @@ import { Crumb } from "@/model/Crumb";
 import { useRouter } from "vue-router";
 import { clientService } from "@/services/client-service";
 import { ElMessageBox } from "element-plus";
-import { SysMenu } from "@/model/SysMenu";
+import { SysMenu } from "@/model/entity/SysMenu";
 import { authApi } from "@/constants/api/auth-api";
 import { Constants } from "@/constants/constants";
 import { authService } from "@/services/auth-service";
