@@ -1,6 +1,6 @@
-const MenuTypeEnum = {
-  LINK: { code: "1", name: "" },
-  OUT_LINK: { code: "2", name: "" },
-  BUTTON: { code: "3", name: "" }
-};
+enum MenuTypeEnum {
+  LINK = 1,
+  OUT_LINK = 2,
+  BUTTON = 3
+}
 export { MenuTypeEnum };
