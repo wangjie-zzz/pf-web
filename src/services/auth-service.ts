@@ -98,7 +98,7 @@ class AuthService {
     // eslint-disable-next-line @typescript-eslint/camelcase
     const params = { ...AuthService.AUTHORIZE_CALLBACK_PARAMS, refresh_token: this.getRefreshToken() };
     return clientService.general(authApi.oauthApi.refreshToken, undefined, params).then(res => {
-      authService.setCache(res.data);
+      this.setCache(res.data);
       return Promise.resolve(true);
     });
   }
