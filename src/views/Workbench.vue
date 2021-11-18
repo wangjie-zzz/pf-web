@@ -10,8 +10,6 @@
 import { defineComponent } from "vue";
 import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
-import { authApi } from "@/constants/api/auth-api";
-import { Constants } from "@/constants/constants";
 import { authService } from "@/services/auth-service";
 export default defineComponent({
   name: "Workbench",
@@ -22,9 +20,7 @@ export default defineComponent({
       });
     };
     const access = () => {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      const params = { ...Constants.AUTHORIZE_CALLBACK_PARAMS, refresh_token: authService.getRefreshToken() };
-      clientService.general(authApi.oauthApi.refreshToken, undefined, params).then(res => {
+      authService.refreshToken().then(res => {
         console.log(res);
       });
     };

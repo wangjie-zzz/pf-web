@@ -12,11 +12,10 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import { clientService } from "@/services/client-service";
-import { authApi } from "@/constants/api/auth-api";
 import { Constants } from "@/constants/constants";
 import router from "@/router";
 import { authService } from "@/services/auth-service";
+import { useNotice } from "@/components/element-plus/notice";
 export default defineComponent({
   name: "Callback",
   setup() {
@@ -24,20 +23,14 @@ export default defineComponent({
     const route = useRoute();
     const initToken = () => {
       if (route.query.code) {
-        clientService
-          .general(authApi.oauthApi.callback, undefined, {
-            ...Constants.AUTHORIZE_CALLBACK_PARAMS,
-            ...route.query
-          })
-          .then(res => {
-            console.log(res);
-            if (res.code === Constants.CODE.SUCCESS) {
-              authService.setCache(res.data);
-              router.push(Constants.HOME_PAGE);
-            } else {
-              logining.value = false;
-            }
-          });
+        authService.token(route.query).then(res => {
+          logining.value = false;
+          if (res) {
+            router.push(Constants.HOME_PAGE);
+          } else {
+            useNotice().message.error("获取token失败");
+          }
+        });
       } else {
         logining.value = false;
       }

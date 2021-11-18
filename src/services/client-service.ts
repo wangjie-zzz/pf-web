@@ -3,16 +3,11 @@ import { HeaderTypeEnum } from "@/constants/enum/header-type.enum";
 import { HeaderService } from "@/services/header-service";
 import { Constants } from "@/constants/constants";
 import { CommonResult } from "@/model/CommonResult";
-import { authApi } from "@/constants/api/auth-api";
 import { authService } from "@/services/auth-service";
 import { useNotice } from "@/components/element-plus/notice";
 import { ApiDetail } from "@/model/Api";
 
 export class ClientService extends HeaderService {
-  static readonly INSTANCE: ClientService = new ClientService();
-  private constructor() {
-    super();
-  }
   private fetch0(path: string, method: MethodTypeEnum = MethodTypeEnum.GET, param: any, requestConfig: RequestInit): Promise<any> {
     if (typeof param === "object") param = JSON.stringify(param);
     return fetch(path, {
@@ -57,7 +52,7 @@ export class ClientService extends HeaderService {
         }
         if (response.code === Constants.CODE.INVALID_TOKEN) {
           console.warn("token已过期，刷新中...");
-          return this.refreshToken().then((res: boolean) => {
+          return authService.refreshToken().then((res: boolean) => {
             if (res) {
               requestConfig = Object.assign(requestConfig, this.createAuthHeaders());
               return this.fetch(path, method, requestConfig, undefined, params);
@@ -67,8 +62,7 @@ export class ClientService extends HeaderService {
           });
         } else if (response.code === Constants.CODE.FORCE_LOGOUT) {
           // TODO 添加被踢出提示
-          const href = this.urlQueryConvert(authApi.oauthApi.authorize.url, Constants.AUTHORIZE_CODE_PARAMS);
-          location.href = href;
+          authService.authCode();
         } else {
           return Promise.resolve(response);
         }
@@ -90,8 +84,7 @@ export class ClientService extends HeaderService {
           //TODO 添加sessionId异常提示
           /*response = Response {type: "basic", 
           url: "http://localhost:4200/xxxxxxxxxxxxx", redirected: false, status: 401, ok: false, …}*/
-          const href = this.urlQueryConvert(authApi.oauthApi.authorize.url, Constants.AUTHORIZE_CODE_PARAMS);
-          location.href = href;
+          authService.authCode();
         } else if (response.status === 503) {
           return { code: Constants.CODE.SERVER_FAIL, message: "请求服务响应异常" };
         }
@@ -145,14 +138,5 @@ export class ClientService extends HeaderService {
     }
     return url;
   }
-
-  refreshToken(): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    const params = { ...Constants.AUTHORIZE_CALLBACK_PARAMS, refresh_token: authService.getRefreshToken() };
-    return this.general(authApi.oauthApi.refreshToken, undefined, params).then(res => {
-      authService.setCache(res.data);
-      return Promise.resolve(true);
-    });
-  }
 }
-export const clientService = ClientService.INSTANCE;
+export const clientService = new ClientService();

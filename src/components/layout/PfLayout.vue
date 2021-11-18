@@ -34,12 +34,10 @@ import PfMenu from "@/components/menu/PfMenu.vue";
 import { menusService } from "@/components/menu/menus-service";
 import { Crumb } from "@/model/Crumb";
 import { useRouter } from "vue-router";
-import { clientService } from "@/services/client-service";
 import { ElMessageBox } from "element-plus";
 import { SysMenu } from "@/model/entity/SysMenu";
-import { authApi } from "@/constants/api/auth-api";
-import { Constants } from "@/constants/constants";
 import { authService } from "@/services/auth-service";
+import { useNotice } from "@/components/element-plus/notice";
 
 export default defineComponent({
   name: "PfLayout",
@@ -81,11 +79,12 @@ export default defineComponent({
     const logout = () => {
       ElMessageBox.confirm("退出当前用户，是否确认？", { confirmButtonText: "确定", cancelButtonText: "取消", type: "warning" }).then(() => {
         /*点击确认*/
-        clientService.general(authApi.oauthApi.logout).then(res => {
-          if (res.code === Constants.CODE.SUCCESS) {
-            authService.clearCache();
+        authService.logout().then(res => {
+          if (res) {
+            window.location.reload();
+          } else {
+            useNotice().message.error("登出失败");
           }
-          window.location.reload();
         });
       });
     };
