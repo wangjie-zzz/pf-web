@@ -7,9 +7,6 @@ export class Constants {
   };
   static HOME_PAGE = "/main/workbench";
   static PERMITALL = ["/callback"];
-  static readonly CACHE_KEY = {
-    DICT: "dict"
-  };
 
   private static REDIRECT_URI = "http://localhost:4200/dcms/callback";
   static AUTHORIZE_CALLBACK_PARAMS = {
