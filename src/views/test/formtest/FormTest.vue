@@ -1,5 +1,6 @@
 <template>
   <el-button @click="disable">disable-name</el-button>
+  <el-date-picker v-model="value1" type="week" format="[Week] ww" placeholder="Pick a week"> </el-date-picker>
   <PfTest :title="'self-test: '"><span>i'm pf content </span></PfTest>
   <el-form class="pf-mb-50" :config="formConfig" :model="formInfo" @validate="validate" @blurEvent="blurEvent" @changeEvent="changeEvent" @focusEvent="focusEvent" @inputEvent="inputEvent"></el-form>
 </template>
