@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import PfLayout from "@/components/layout/PfLayout.vue";
 
 export default defineComponent({
   name: "LayoutConfig",

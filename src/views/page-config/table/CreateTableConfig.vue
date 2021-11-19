@@ -59,7 +59,6 @@
 import { defineAsyncComponent, defineComponent, onMounted, ref, Ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
 import { systemApi } from "@/constants/api/system-api";
-import PfMain from "@/components/layout/PfMain.vue";
 import { useData, useDict, emptyForm, FormModel, emptyTable, TableModel, SysTableField, SysTableInfo, ResponseCodeEnum } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
@@ -69,7 +68,6 @@ import { copy } from "@/constants/util/objects-utils";
 export default defineComponent({
   name: "CreateTableConfig",
   components: {
-    PfMain,
     AsyncImportForDb: defineAsyncComponent(() => import("@/views/page-config/dialog/ImportForDb.vue"))
   },
   props: {

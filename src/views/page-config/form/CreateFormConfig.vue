@@ -59,7 +59,6 @@
 import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
 import { systemApi } from "@/constants/api/system-api";
-import PfMain from "@/components/layout/PfMain.vue";
 import { useData, useDict, emptyForm, FormModel, useHttpClient, emptyTable, TableModel, SysFormInfo, SysFormField, ResponseCodeEnum } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import ImportForDb from "@/views/page-config/dialog/ImportForDb.vue";
@@ -68,7 +67,7 @@ import { copy } from "@/constants/util/objects-utils";
 
 export default defineComponent({
   name: "CreateFormConfig",
-  components: { PfMain, ImportForDb },
+  components: { ImportForDb },
   props: {
     name: {
       type: String,

@@ -1,5 +1,5 @@
 <template>
-  <pf-layout>
+  <pf-layout @tab-click="tabClick" @menu-open="menuOpen" @menu-close="menuClose" @logout="logout" @menu-click="menuClick">
     <div class="pf-main">
       <router-view v-slot="{ Component }">
         <!--离场无动画-->
@@ -12,14 +12,48 @@
 </template>
 
 <script lang="ts">
+import { ElMessageBox } from "element-plus";
 import { defineComponent } from "vue";
-import PfLayout from "@/components/layout/PfLayout.vue";
+import { Crumb, ResponseCodeEnum, SysMenu, useAuth, useHttpClient } from "pf-component";
+import { useNotice } from "@/components/element-plus/notice";
+import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Main",
-  components: { PfLayout },
   setup() {
-    return {};
+    const tabClick = (e: Crumb) => {
+      useRouter().push({ path: e.path });
+    };
+    const menuClick = (menu: SysMenu) => {
+      useRouter().push({ path: menu.menuUrl });
+    };
+    const menuOpen = () => {
+      console.log("menuopen.........");
+    };
+    const menuClose = () => {
+      console.log("menu close.........");
+    };
+    const logout = () => {
+      ElMessageBox.confirm("退出当前用户，是否确认？", { confirmButtonText: "确定", cancelButtonText: "取消", type: "warning" }).then(() => {
+        /*点击确认*/
+        useAuth()
+          .logout()
+          .then(res => {
+            if (res) {
+              window.location.reload();
+            } else {
+              useNotice().message.error("登出失败！");
+            }
+          });
+      });
+    };
+    return {
+      tabClick,
+      logout,
+      menuOpen,
+      menuClose,
+      menuClick
+    };
   }
 });
 </script>
