@@ -1,5 +1,4 @@
-import { BaseApi } from "@/constants/api/base-api";
-import { Api, HeaderTypeEnum, MethodTypeEnum } from "pf-component";
+import { Api, BaseApi, HeaderTypeEnum, MethodTypeEnum } from "pf-component";
 
 class SystemApi extends BaseApi {
   tenantApi: Api = {};
