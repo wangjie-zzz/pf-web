@@ -1,16 +1,12 @@
 // import { clientService } from "@/services/client-service";
 // import { systemApi } from "@/constants/api/system-api";
 // import { Constants } from "@/constants/constants";
-// import { FormFieldModel, FormModel } from "pf-component/packages/services/model/FormModel";
 // import { DictNameEnum } from "@/constants/enum/dict-name.enum";
-// import { SysDict } from "pf-component/packages/services/model/SysDict";
 // import { authService } from "@/services/auth-service";
-// import { TableColumnModel, TableModel } from "pf-component/packages/services/model/TableModel";
 // import { SysTableInfo } from "@/model/entity/SysTableInfo";
 // import { SysTableField } from "@/model/entity/SysTableField";
 // import { SysFormInfo } from "@/model/entity/SysFormInfo";
 // import { SysFormField } from "@/model/entity/SysFormField";
-// import { isNull } from "pf-component/packages/util/objects-utils";
 // import { sysDict, sysFormField, sysForm, tenantInfo, sysDept, sysUser, sysRole, sysPost, tableField, sysTable, sysTableField } from "@/constants/data/table-data";
 //
 // const formDatas: FormModel[] = [
@@ -160,7 +156,7 @@
 //     if (idx === 0) {
 //       clientService.general(systemApi.formConfigApi.createForm, undefined, transferForm(form)).then(res => {
 //         console.log(res);
-//         if (res.code === Constants.CODE.SUCCESS) {
+//         if (res.code === ResponseCodeEnum.SUCCESS) {
 //           clientService.general(systemApi.formConfigApi.createFormField, undefined, transferFields(form.fields, res.data)).then(res => {
 //             console.log(res);
 //           });
@@ -173,10 +169,10 @@
 //     if (/*idx === 0*/ true) {
 //       clientService.general(systemApi.tableConfigApi.create, undefined, transferTable(table)).then(res => {
 //         console.log(res);
-//         if (res.code === Constants.CODE.SUCCESS) {
+//         if (res.code === ResponseCodeEnum.SUCCESS) {
 //           clientService.general(systemApi.tableConfigApi.createField, undefined, transferTableFields(table.columns, res.data)).then(res => {
 //             console.log(res);
-//             if (res.code === Constants.CODE.SUCCESS) {
+//             if (res.code === ResponseCodeEnum.SUCCESS) {
 //               // console.log();
 //             } else {
 //               console.log("field插入失败：" + res.data);

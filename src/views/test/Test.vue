@@ -44,9 +44,9 @@ import RefTest from "@/views/test/RefTest.vue";
 import FormTest from "@/views/test/formtest/FormTest.vue";
 import Page from "@/views/test/Page.vue";
 import FileDialog from "@/components/dialog/FileDialog.vue";
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
+import { useHttpClient } from "pf-component";
 
 export default defineComponent({
   name: "Test",
@@ -195,9 +195,11 @@ export default defineComponent({
         console.log(Number(100 / 0).toFixed(1));
       },
       getApp() {
-        clientService.general(systemApi.appApi.list).then(res => {
-          console.log(res);
-        });
+        useHttpClient()
+          .general(systemApi.appApi.list)
+          .then(res => {
+            console.log(res);
+          });
       },
       showAsync2
     };

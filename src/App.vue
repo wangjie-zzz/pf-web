@@ -6,10 +6,10 @@
 <script lang="ts">
 import { defineComponent, reactive, Ref, ref, provide, watch } from "vue";
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from "vue-router";
-import { Crumb } from "@/model/Crumb";
 import { menusService } from "@/components/menu/menus-service";
 import { ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/lib/locale/lang/zh-cn";
+import { Crumb, useMenu } from "pf-component";
 
 export default defineComponent({
   props: {},
@@ -27,7 +27,7 @@ export default defineComponent({
     watch(
       () => route.name,
       () => {
-        const menuId = menusService.refreshCrumbs(route, crumbs);
+        const menuId = useMenu().refreshCrumbs(route.fullPath, route.name as string, route.params, route.meta, crumbs, menusService.menus);
         // 跳转的路由：不是菜单 && 没有meta信息则不加到crumbs
         if (menuId) {
           activeCrumb.value = route.fullPath;

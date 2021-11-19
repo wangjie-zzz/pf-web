@@ -58,20 +58,13 @@
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
-import { Constants } from "@/constants/constants";
 import PfMain from "@/components/layout/PfMain.vue";
-import { useDict } from "pf-component/packages/util/dict-convert";
-import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
-import { SysFormInfo } from "@/model/entity/SysFormInfo";
-import { dataService } from "@/services/data-service";
+import { useData, useDict, emptyForm, FormModel, useHttpClient, emptyTable, TableModel, SysFormInfo, SysFormField, ResponseCodeEnum } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { SysFormField } from "@/model/entity/SysFormField";
-import { copy } from "pf-component/packages/util/objects-utils";
 import ImportForDb from "@/views/page-config/dialog/ImportForDb.vue";
-import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
+import { copy } from "@/constants/util/objects-utils";
 
 export default defineComponent({
   name: "CreateFormConfig",
@@ -83,6 +76,7 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const { general } = useHttpClient();
     const { convertAllOptions } = useDict();
     const { message, loading } = useNotice();
 
@@ -104,8 +98,8 @@ export default defineComponent({
     const saveForm = () => {
       (formFDom.value as any).validate((val: boolean) => {
         if (val) {
-          clientService.general(systemApi.formConfigApi.createForm, undefined, formInfo.value).then(res => {
-            if (res.code === Constants.CODE.SUCCESS) {
+          general(systemApi.formConfigApi.createForm, undefined, formInfo.value).then(res => {
+            if (res.code === ResponseCodeEnum.SUCCESS) {
               message.success(res.message);
               isSave.value = true;
               refresh();
@@ -117,14 +111,14 @@ export default defineComponent({
       });
     };
     const create = () => {
-      fieldInfo.value = dataService.toFormValue(fieldFConfig.value as any);
+      fieldInfo.value = useData().toFormValue(fieldFConfig.value as any);
       show.value = true;
     };
     const confirmCreate = () => {
       const param = copy(fieldInfo.value);
       param.formId = formInfo.value.formId;
-      clientService.general(systemApi.formConfigApi.updateFormField, undefined, param).then(res => {
-        if (res.code === Constants.CODE.SUCCESS) {
+      general(systemApi.formConfigApi.updateFormField, undefined, param).then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
           message.success(res.message);
           show.value = false;
           refresh();
@@ -142,8 +136,8 @@ export default defineComponent({
     };
     const preview = () => {
       formInfo.value.fieldDtos = fieldList.value;
-      previewFormConfig.value = dataService.toFormModel(formInfo.value);
-      previewInfo.value = dataService.toFormValue(previewFormConfig.value);
+      previewFormConfig.value = useData().toFormModel(formInfo.value);
+      previewInfo.value = useData().toFormValue(previewFormConfig.value);
 
       previewShow.value = true;
     };
@@ -172,23 +166,21 @@ export default defineComponent({
     };
 
     const init = (name: string) => {
-      clientService
-        .general<any>(systemApi.formConfigApi.formInfo, { name })
-        .then(res => {
-          if (res.code === Constants.CODE.SUCCESS) {
-            formInfo.value = res.data.form;
-            fieldList.value = res.data.fields;
-            isSave.value = true;
-            formFConfig.value.setFormDisable();
-          } else {
-            message.error(res.message);
-          }
-        });
+      general<any>(systemApi.formConfigApi.formInfo, { name }).then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
+          formInfo.value = res.data.form;
+          fieldList.value = res.data.fields;
+          isSave.value = true;
+          formFConfig.value.setFormDisable();
+        } else {
+          message.error(res.message);
+        }
+      });
     };
     onMounted(() => {
       Promise.all([
-        dataService.loadTable([{ name: TableNameEnum.sysFormField, config: fieldTConfig }]),
-        dataService.loadForm([
+        useData().loadTable([{ name: TableNameEnum.sysFormField, config: fieldTConfig }]),
+        useData().loadForm([
           {
             name: FormNameEnum.sysFieldForm,
             config: fieldFConfig,

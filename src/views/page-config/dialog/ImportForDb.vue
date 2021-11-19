@@ -22,16 +22,12 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref, toRefs } from "vue";
-import { Options } from "pf-component/packages/services/model/FormModel";
-import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
 import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
-import { isNull } from "pf-component/packages/util/objects-utils";
-import { dataService } from "@/services/data-service";
+import { useData, Options, emptyTable, TableModel, ApiDetail, useHttpClient, ResponseCodeEnum } from "pf-component";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
-import { ApiDetail } from "@/model/Api";
+import { isNull } from "@/constants/util/objects-utils";
 
 export default defineComponent({
   name: "ImportForDb",
@@ -54,18 +50,20 @@ export default defineComponent({
   emits: ["close"],
   setup(props, { emit }) {
     onMounted(() => {
-      dataService.loadTable([{ name: TableNameEnum.tableField, config: fieldConfig }]).then(res => {
-        fieldConfig.value.checkbox();
-      });
+      useData()
+        .loadTable([{ name: TableNameEnum.tableField, config: fieldConfig }])
+        .then(res => {
+          fieldConfig.value.checkbox();
+        });
     });
     const propRef = toRefs(props);
-
+    const { general } = useHttpClient();
     const db: Ref<string> = ref("");
     const tb: Ref<string> = ref("");
     const dbs: Ref<Options[]> = ref([]);
     const tbs: Ref<Options[]> = ref([]);
-    clientService.general<any[]>(systemApi.metadataApi.dbNames).then(res => {
-      if (res.code === Constants.CODE.SUCCESS) {
+    general<any[]>(systemApi.metadataApi.dbNames).then(res => {
+      if (res.code === ResponseCodeEnum.SUCCESS) {
         dbs.value = res.data.map(db => {
           return {
             key: db,
@@ -77,34 +75,30 @@ export default defineComponent({
       }
     });
     const initTbs = (dbName: string) => {
-      clientService
-        .general<any[]>(systemApi.metadataApi.getTableNamesByDb, { dbName })
-        .then(res => {
-          if (res.code === Constants.CODE.SUCCESS) {
-            tbs.value = res.data.map(tb => {
-              return {
-                key: tb,
-                value: tb
-              };
-            });
-          } else {
-            useNotice().message.error(res.message);
-          }
-        });
+      general<any[]>(systemApi.metadataApi.getTableNamesByDb, { dbName }).then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
+          tbs.value = res.data.map(tb => {
+            return {
+              key: tb,
+              value: tb
+            };
+          });
+        } else {
+          useNotice().message.error(res.message);
+        }
+      });
     };
     const initTbCols = () => {
-      clientService
-        .general<any[]>(systemApi.metadataApi.getTableNamesByDbAndTb, {
-          dbName: db.value,
-          tbName: tb.value
-        })
-        .then(res => {
-          if (res.code === Constants.CODE.SUCCESS) {
-            fieldList.value = res.data;
-          } else {
-            useNotice().message.error(res.message);
-          }
-        });
+      general<any[]>(systemApi.metadataApi.getTableNamesByDbAndTb, {
+        dbName: db.value,
+        tbName: tb.value
+      }).then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
+          fieldList.value = res.data;
+        } else {
+          useNotice().message.error(res.message);
+        }
+      });
     };
     const fieldConfig: Ref<TableModel> = ref(emptyTable);
     const fieldList: Ref<any[]> = ref([]);
@@ -137,8 +131,8 @@ export default defineComponent({
         api = systemApi.tableConfigApi.createByTable;
         queryParams = { tableId: propRef.tableId.value, appId: Constants.DEFAULT_APP_ID };
       }
-      clientService.general(api, queryParams, selectedFieldList.value).then(res => {
-        if (res.code === Constants.CODE.SUCCESS) {
+      general(api, queryParams, selectedFieldList.value).then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
           useNotice().message.success(res.message);
           emit("close");
         } else {

@@ -14,8 +14,8 @@ import { defineComponent, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { Constants } from "@/constants/constants";
 import router from "@/router";
-import { authService } from "@/services/auth-service";
 import { useNotice } from "@/components/element-plus/notice";
+import { useAuth } from "pf-component";
 export default defineComponent({
   name: "Callback",
   setup() {
@@ -23,14 +23,16 @@ export default defineComponent({
     const route = useRoute();
     const initToken = () => {
       if (route.query.code) {
-        authService.token(route.query).then(res => {
-          logining.value = false;
-          if (res) {
-            router.push(Constants.HOME_PAGE);
-          } else {
-            useNotice().message.error("获取token失败");
-          }
-        });
+        useAuth()
+          .token(route.query)
+          .then(res => {
+            logining.value = false;
+            if (res) {
+              router.push(Constants.HOME_PAGE);
+            } else {
+              useNotice().message.error("获取token失败");
+            }
+          });
       } else {
         logining.value = false;
       }

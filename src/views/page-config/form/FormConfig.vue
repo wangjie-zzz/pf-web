@@ -27,15 +27,12 @@
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
-import { Constants } from "@/constants/constants";
 import router from "@/router";
 // import { init } from "@/views/page-config/form/init-basedata";
-import { FormModel } from "pf-component/packages/services/model/FormModel";
-import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
-import { dataService } from "@/services/data-service";
+import { useData, FormModel, emptyTable, TableModel, ResponseCodeEnum } from "pf-component";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
+import { useHttpClient } from "pf-component";
 
 export default defineComponent({
   name: "FormConfig",
@@ -45,13 +42,15 @@ export default defineComponent({
     const formList: Ref<any[]> = ref([]);
     const show: Ref<boolean> = ref(false);
     const select = () => {
-      clientService.general<any[]>(systemApi.formConfigApi.list).then(res => {
-        if (res.code === Constants.CODE.SUCCESS) {
-          formList.value = res.data;
-        } else {
-          message.error(res.message);
-        }
-      });
+      useHttpClient()
+        .general<any[]>(systemApi.formConfigApi.list)
+        .then(res => {
+          if (res.code === ResponseCodeEnum.SUCCESS) {
+            formList.value = res.data;
+          } else {
+            message.error(res.message);
+          }
+        });
     };
     /*const setCache = () => {
     };*/
@@ -77,12 +76,14 @@ export default defineComponent({
       }
     };
     onMounted(() => {
-      dataService.loadTable([{ name: TableNameEnum.sysForm, config: formConfig }]).then(res => {
-        if (res) {
-          formConfig.value.checkbox();
-          select();
-        }
-      });
+      useData()
+        .loadTable([{ name: TableNameEnum.sysForm, config: formConfig }])
+        .then(res => {
+          if (res) {
+            formConfig.value.checkbox();
+            select();
+          }
+        });
     });
     /*const initData = () => {
       init();

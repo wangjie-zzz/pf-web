@@ -1,9 +1,7 @@
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
-import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
 import { Ref } from "vue";
-import { Options } from "pf-component/packages/services/model/FormModel";
+import { Options, ResponseCodeEnum, useHttpClient } from "pf-component";
 export type TNode = { supId: string; id: string; name: string; isCom: boolean; leaf: boolean; level: number; children: TNode[] };
 const tNodeToOptions = (nodes: TNode[], isCom?: boolean): Options[] => {
   if (!nodes || nodes.length === 0) return [];
@@ -70,23 +68,25 @@ const deptsToTNode = (depts: any[]): TNode[] => {
 export const useOrg = () => {
   const { message } = useNotice();
   const companyList = (): Promise<TNode[]> => {
-    return clientService.general<any[]>(systemApi.companyApi.list).then(res => {
-      if (res.code === Constants.CODE.SUCCESS) {
-        res.data.forEach(com => {
-          com.sysDeptInfos = deptsToTNode(com.sysDeptInfos);
-        });
-        return compsToTNode(res.data);
-      } else {
-        message.error(res.message);
-        return [];
-      }
-    });
+    return useHttpClient()
+      .general<any[]>(systemApi.companyApi.list)
+      .then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
+          res.data.forEach(com => {
+            com.sysDeptInfos = deptsToTNode(com.sysDeptInfos);
+          });
+          return compsToTNode(res.data);
+        } else {
+          message.error(res.message);
+          return [];
+        }
+      });
   };
   const deptList = (id: string, isCom: boolean): Promise<any[]> => {
-    return clientService
+    return useHttpClient()
       .general<any[]>(systemApi.companyApi.deptList, { id, isCom })
       .then(res => {
-        if (res.code === Constants.CODE.SUCCESS) {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
           return res.data;
         } else {
           message.error(res.message);
@@ -95,10 +95,10 @@ export const useOrg = () => {
       });
   };
   const userList = (id: string, isCom: boolean): Promise<any[]> => {
-    return clientService
+    return useHttpClient()
       .general<any[]>(systemApi.companyApi.userList, { id, isCom })
       .then(res => {
-        if (res.code === Constants.CODE.SUCCESS) {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
           return res.data;
         } else {
           message.error(res.message);
@@ -117,12 +117,14 @@ export const useOrg = () => {
       }
       body.comLevel = supCom ? supCom.level + 1 : 0;
     }
-    return clientService.general<TNode[]>(systemApi.companyApi.addCompany, undefined, body).then(res => {
-      if (res.code !== Constants.CODE.SUCCESS) {
-        message.error(res.message);
-      }
-      return res.code === Constants.CODE.SUCCESS;
-    });
+    return useHttpClient()
+      .general<TNode[]>(systemApi.companyApi.addCompany, undefined, body)
+      .then(res => {
+        if (res.code !== ResponseCodeEnum.SUCCESS) {
+          message.error(res.message);
+        }
+        return res.code === ResponseCodeEnum.SUCCESS;
+      });
   };
   const addDept = (body: any, treeData: Ref<TNode[]>): Promise<boolean> => {
     if (!body.deptSupDeptId) {
@@ -135,20 +137,24 @@ export const useOrg = () => {
       }
       body.deptLevel = supDept ? supDept.level + 1 : 0;
     }
-    return clientService.general<TNode[]>(systemApi.companyApi.addDept, undefined, body).then(res => {
-      if (res.code !== Constants.CODE.SUCCESS) {
-        message.error(res.message);
-      }
-      return res.code === Constants.CODE.SUCCESS;
-    });
+    return useHttpClient()
+      .general<TNode[]>(systemApi.companyApi.addDept, undefined, body)
+      .then(res => {
+        if (res.code !== ResponseCodeEnum.SUCCESS) {
+          message.error(res.message);
+        }
+        return res.code === ResponseCodeEnum.SUCCESS;
+      });
   };
   const addUser = (body: any): Promise<boolean> => {
-    return clientService.general<TNode[]>(systemApi.userApi.adminCreate, undefined, body).then(res => {
-      if (res.code !== Constants.CODE.SUCCESS) {
-        message.error(res.message);
-      }
-      return res.code === Constants.CODE.SUCCESS;
-    });
+    return useHttpClient()
+      .general<TNode[]>(systemApi.userApi.adminCreate, undefined, body)
+      .then(res => {
+        if (res.code !== ResponseCodeEnum.SUCCESS) {
+          message.error(res.message);
+        }
+        return res.code === ResponseCodeEnum.SUCCESS;
+      });
   };
   return { companyList, deptList, userList, addCompany, addDept, addUser, findNodeById, tNodeToOptions };
 };

@@ -53,10 +53,8 @@
 import { defineComponent, onMounted, ref, Ref } from "vue";
 import { usePost } from "@/views/system/post/use-post";
 import { useNotice } from "@/components/element-plus/notice";
-import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
-import { dataService } from "@/services/data-service";
+import { useData, emptyForm, FormModel, emptyTable } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { emptyTable } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
@@ -71,8 +69,8 @@ export default defineComponent({
     const postInfo: Ref<any> = ref(null as any);
     onMounted(() => {
       Promise.all([
-        dataService.loadTable([{ name: TableNameEnum.sysPost, config: postConfig }]),
-        dataService.loadForm([
+        useData().loadTable([{ name: TableNameEnum.sysPost, config: postConfig }]),
+        useData().loadForm([
           {
             name: FormNameEnum.sysPostForm,
             config: postFormConfig,

@@ -100,11 +100,9 @@
 import { defineComponent, onMounted, ref, Ref, watch } from "vue";
 import { TNode, useOrg } from "@/views/system/org/use-org";
 import { useTenant } from "@/views/system/tenant/use-tenant";
-import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
 import { useNotice } from "@/components/element-plus/notice";
-import { dataService } from "@/services/data-service";
+import { useData, emptyForm, FormModel, emptyTable, TableModel } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
@@ -291,7 +289,7 @@ export default defineComponent({
     };
     onMounted(() => {
       Promise.all([
-        dataService.loadForm([
+        useData().loadForm([
           {
             name: FormNameEnum.companyForm,
             config: compFormConfig,
@@ -300,7 +298,7 @@ export default defineComponent({
           { name: FormNameEnum.deptForm, config: deptFormConfig, info: deptInfo },
           { name: FormNameEnum.sysUserForm, config: userFormConfig, info: userInfo }
         ]),
-        dataService.loadTable([
+        useData().loadTable([
           { name: TableNameEnum.sysDept, config: deptConfig },
           { name: TableNameEnum.sysUser, config: userConfig }
         ])

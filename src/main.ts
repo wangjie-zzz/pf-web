@@ -8,9 +8,7 @@ import "element-plus/lib/theme-chalk/index.css";
 import "@/assets/css/animate.min.css";
 import "@/assets/css/index.scss";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import Pf from "pf-component"; // TODO 页面刷新会清空字典
+import PF, { useAuth } from "pf-component";
 import "pf-component/lib/index.css";
 
 const app = createApp(App);
@@ -19,5 +17,10 @@ app
   .use(store)
   .use(router)
   .use(ElementPlus)
-  .use(Pf);
+  .use(PF, {
+    clientId: "pf-web",
+    secret: "123456",
+    redirect: "http://localhost:4200/dcms/callback"
+  });
+useAuth().authCode();
 app.mount("#app");

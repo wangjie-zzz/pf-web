@@ -1,7 +1,5 @@
 import { BaseApi } from "@/constants/api/base-api";
-import { MethodTypeEnum } from "@/constants/enum/method-type.enum";
-import { HeaderTypeEnum } from "@/constants/enum/header-type.enum";
-import { Api } from "@/model/Api";
+import { Api, HeaderTypeEnum, MethodTypeEnum } from "pf-component";
 
 class SystemApi extends BaseApi {
   tenantApi: Api = {};
@@ -12,7 +10,6 @@ class SystemApi extends BaseApi {
   metadataApi: Api = {};
   formConfigApi: Api = {};
   tableConfigApi: Api = {};
-  menuApi: Api = {};
   roleApi: Api = {};
   postApi: Api = {};
   constructor() {
@@ -25,13 +22,6 @@ class SystemApi extends BaseApi {
       adminCreate: {
         url: this.getUrl() + "/sysUserInfo/adminCreate",
         method: MethodTypeEnum.POST,
-        header: HeaderTypeEnum.AUTH
-      }
-    };
-    this.menuApi = {
-      list: {
-        url: this.getUrl() + "/sysMenuInfo/list",
-        method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       }
     };
@@ -90,16 +80,6 @@ class SystemApi extends BaseApi {
       }
     };
     this.dictApi = {
-      cacheList: {
-        url: this.getUrl() + "/sysDictInfo/cacheList",
-        method: MethodTypeEnum.POST,
-        header: HeaderTypeEnum.AUTH
-      },
-      list: {
-        url: this.getUrl() + "/sysDictInfo/list",
-        method: MethodTypeEnum.GET,
-        header: HeaderTypeEnum.AUTH
-      },
       delete: {
         url: this.getUrl() + "/sysDictInfo/delete",
         method: MethodTypeEnum.POST,
@@ -180,11 +160,6 @@ class SystemApi extends BaseApi {
       }
     };
     this.formConfigApi = {
-      cacheList: {
-        url: this.getUrl() + "/sysFormInfo/cacheList",
-        method: MethodTypeEnum.POST,
-        header: HeaderTypeEnum.AUTH
-      },
       list: {
         url: this.getUrl() + "/sysFormInfo/list",
         method: MethodTypeEnum.GET,
@@ -217,11 +192,6 @@ class SystemApi extends BaseApi {
       }
     };
     this.tableConfigApi = {
-      cacheList: {
-        url: this.getUrl() + "/sysTableInfo/cacheList",
-        method: MethodTypeEnum.POST,
-        header: HeaderTypeEnum.AUTH
-      },
       list: {
         url: this.getUrl() + "/sysTableInfo/list",
         method: MethodTypeEnum.GET,

@@ -1,35 +1,40 @@
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
-import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
+import { ResponseCodeEnum, useHttpClient } from "pf-component";
 
 export const useTenant = () => {
   const { message } = useNotice();
   const list = (): Promise<any[]> => {
-    return clientService.general<any[]>(systemApi.tenantApi.list).then(res => {
-      if (res.code === Constants.CODE.SUCCESS) {
-        return res.data;
-      } else {
-        message.error(res.message);
-        return [];
-      }
-    });
+    return useHttpClient()
+      .general<any[]>(systemApi.tenantApi.list)
+      .then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
+          return res.data;
+        } else {
+          message.error(res.message);
+          return [];
+        }
+      });
   };
   const update = (body: any): Promise<boolean> => {
-    return clientService.general(systemApi.tenantApi.update, undefined, body).then(res => {
-      if (res.code !== Constants.CODE.SUCCESS) {
-        message.error(res.message);
-      }
-      return res.code === Constants.CODE.SUCCESS;
-    });
+    return useHttpClient()
+      .general(systemApi.tenantApi.update, undefined, body)
+      .then(res => {
+        if (res.code !== ResponseCodeEnum.SUCCESS) {
+          message.error(res.message);
+        }
+        return res.code === ResponseCodeEnum.SUCCESS;
+      });
   };
   const deleteTen = (body: string[]): Promise<boolean> => {
-    return clientService.general(systemApi.tenantApi.delete, undefined, body).then(res => {
-      if (res.code !== Constants.CODE.SUCCESS) {
-        message.error(res.message);
-      }
-      return res.code === Constants.CODE.SUCCESS;
-    });
+    return useHttpClient()
+      .general(systemApi.tenantApi.delete, undefined, body)
+      .then(res => {
+        if (res.code !== ResponseCodeEnum.SUCCESS) {
+          message.error(res.message);
+        }
+        return res.code === ResponseCodeEnum.SUCCESS;
+      });
   };
   return { list, update, deleteTen };
 };

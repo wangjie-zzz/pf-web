@@ -34,18 +34,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, Ref, onMounted } from "vue";
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
-import { Constants } from "@/constants/constants";
 import { useNotice } from "@/components/element-plus/notice";
-import { SysDict } from "pf-component/packages/services/model/SysDict";
-import { authService } from "@/services/auth-service";
-import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
-import { dataService } from "@/services/data-service";
+import { useData, useDict, emptyForm, FormModel, useHttpClient, emptyTable, TableModel, SysDict, ResponseCodeEnum } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
-import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
-import { useDict } from "pf-component/packages/util/dict-convert";
 
 export default defineComponent({
   name: "Dict",
@@ -59,46 +52,50 @@ export default defineComponent({
     const formInfo: Ref<SysDict> = ref(null as any);
     const dictForm = ref(null);
     onMounted(() => {
-      const formPromise = dataService.loadForm([
+      const formPromise = useData().loadForm([
         {
           name: FormNameEnum.sysDictForm,
           config: formConfig,
           info: formInfo
         }
       ]);
-      const tablePromise = dataService.loadTable([{ name: TableNameEnum.sysDict, config: dictConfig }]);
+      const tablePromise = useData().loadTable([{ name: TableNameEnum.sysDict, config: dictConfig }]);
       Promise.all([formPromise, tablePromise]).then((res: boolean[]) => {
         select();
       });
     });
 
     const select = () => {
-      clientService.general<SysDict[]>(systemApi.dictApi.list).then(res => {
-        if (res.code === Constants.CODE.SUCCESS) {
-          dictData.value = res.data;
-        } else {
-          message.error(res.message);
-        }
-      });
+      useHttpClient()
+        .general<SysDict[]>(systemApi.dictApi.list)
+        .then(res => {
+          if (res.code === ResponseCodeEnum.SUCCESS) {
+            dictData.value = res.data;
+          } else {
+            message.error(res.message);
+          }
+        });
     };
     const setCache = () => {
       useDict().setDict(dictData.value);
     };
     const create = () => {
-      formInfo.value = dataService.toFormValue(formConfig.value as any);
+      formInfo.value = useData().toFormValue(formConfig.value as any);
       show.value = true;
     };
     const confirmCreate = () => {
       (dictForm.value as any).validate((val: boolean) => {
         if (val) {
-          clientService.general(systemApi.dictApi.update, undefined, formInfo.value).then(res => {
-            if (res.code === Constants.CODE.SUCCESS) {
-              show.value = false;
-              select();
-            } else {
-              message.error(res.message);
-            }
-          });
+          useHttpClient()
+            .general(systemApi.dictApi.update, undefined, formInfo.value)
+            .then(res => {
+              if (res.code === ResponseCodeEnum.SUCCESS) {
+                show.value = false;
+                select();
+              } else {
+                message.error(res.message);
+              }
+            });
         }
       });
     };

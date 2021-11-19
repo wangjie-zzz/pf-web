@@ -7,8 +7,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, Ref, onMounted } from "vue";
-import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
-import { dataService } from "@/services/data-service";
+import { useData, emptyForm, FormModel } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
 
 export default defineComponent({
@@ -16,7 +15,7 @@ export default defineComponent({
   setup(prop) {
     const formConfig: Ref<FormModel> = ref(emptyForm);
     const formInfo: Ref<any> = ref(undefined as any);
-    dataService
+    useData()
       .loadForm([
         {
           name: FormNameEnum.testForm,

@@ -1,7 +1,5 @@
 import { BaseApi } from "@/constants/api/base-api";
-import { MethodTypeEnum } from "@/constants/enum/method-type.enum";
-import { HeaderTypeEnum } from "@/constants/enum/header-type.enum";
-import { Api } from "@/model/Api";
+import { Api, HeaderTypeEnum, MethodTypeEnum } from "pf-component";
 
 class AuthApi extends BaseApi {
   oauthApi: Api = {};

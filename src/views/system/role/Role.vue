@@ -38,10 +38,8 @@
 import { defineComponent, onMounted, ref, Ref } from "vue";
 import { useRole } from "@/views/system/role/use-role";
 import { useNotice } from "@/components/element-plus/notice";
-import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
-import { dataService } from "@/services/data-service";
+import { useData, emptyForm, FormModel, emptyTable } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { emptyTable } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
 
 export default defineComponent({
@@ -55,14 +53,13 @@ export default defineComponent({
     const roleFormConfig: Ref<FormModel> = ref(emptyForm);
     const roleInfo: Ref<any> = ref(null as any);
     onMounted(() => {
-      Promise.all([
-        dataService.loadTable([{ name: TableNameEnum.sysRole, config: roleConfig }]),
-        dataService.loadForm([{ name: FormNameEnum.sysRoleForm, config: roleFormConfig, info: roleInfo }])
-      ]).then(ress => {
-        if (ress.findIndex(res => !res) === -1) {
-          refreshRole();
+      Promise.all([useData().loadTable([{ name: TableNameEnum.sysRole, config: roleConfig }]), useData().loadForm([{ name: FormNameEnum.sysRoleForm, config: roleFormConfig, info: roleInfo }])]).then(
+        ress => {
+          if (ress.findIndex(res => !res) === -1) {
+            refreshRole();
+          }
         }
-      });
+      );
     });
     const refreshRole = () => {
       roleList().then(res => {

@@ -27,39 +27,40 @@
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
-import { Constants } from "@/constants/constants";
 import router from "@/router";
-import { FormModel } from "pf-component/packages/services/model/FormModel";
-import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
-import { dataService } from "@/services/data-service";
+import { useData, FormModel, emptyTable, TableModel, ResponseCodeEnum } from "pf-component";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
+import { useHttpClient } from "pf-component";
 // import { init } from "@/views/page-config/test/init-basedata";
 
 export default defineComponent({
   name: "TableConfig",
   setup() {
     onMounted(() => {
-      dataService.loadTable([{ name: TableNameEnum.sysTable, config: tableConfig }]).then(res => {
-        if (res) {
-          tableConfig.value.checkbox();
-          select();
-        }
-      });
+      useData()
+        .loadTable([{ name: TableNameEnum.sysTable, config: tableConfig }])
+        .then(res => {
+          if (res) {
+            tableConfig.value.checkbox();
+            select();
+          }
+        });
     });
     const { message } = useNotice();
     const tableConfig: Ref<TableModel> = ref(emptyTable);
     const tableList: Ref<any[]> = ref([]);
     const show: Ref<boolean> = ref(false);
     const select = () => {
-      clientService.general<any[]>(systemApi.tableConfigApi.list).then(res => {
-        if (res.code === Constants.CODE.SUCCESS) {
-          tableList.value = res.data;
-        } else {
-          message.error(res.message);
-        }
-      });
+      useHttpClient()
+        .general<any[]>(systemApi.tableConfigApi.list)
+        .then(res => {
+          if (res.code === ResponseCodeEnum.SUCCESS) {
+            tableList.value = res.data;
+          } else {
+            message.error(res.message);
+          }
+        });
     };
     /*const setCache = () => {
     };*/

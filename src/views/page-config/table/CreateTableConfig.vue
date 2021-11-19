@@ -58,19 +58,13 @@
 <script lang="ts">
 import { defineAsyncComponent, defineComponent, onMounted, ref, Ref } from "vue";
 import { useNotice } from "@/components/element-plus/notice";
-import { clientService } from "@/services/client-service";
 import { systemApi } from "@/constants/api/system-api";
-import { Constants } from "@/constants/constants";
 import PfMain from "@/components/layout/PfMain.vue";
-import { useDict } from "pf-component/packages/util/dict-convert";
-import { emptyForm, FormModel } from "pf-component/packages/services/model/FormModel";
-import { dataService } from "@/services/data-service";
+import { useData, useDict, emptyForm, FormModel, emptyTable, TableModel, SysTableField, SysTableInfo, ResponseCodeEnum } from "pf-component";
 import { FormNameEnum } from "@/constants/enum/form-name.enum";
-import { copy } from "pf-component/packages/util/objects-utils";
-import { SysTableInfo } from "@/model/entity/SysTableInfo";
-import { SysTableField } from "@/model/entity/SysTableField";
-import { emptyTable, TableModel } from "pf-component/packages/services/model/TabelModel";
 import { TableNameEnum } from "@/constants/enum/table-name.enum";
+import { useHttpClient } from "pf-component";
+import { copy } from "@/constants/util/objects-utils";
 
 export default defineComponent({
   name: "CreateTableConfig",
@@ -87,7 +81,7 @@ export default defineComponent({
   setup(props) {
     const { convertAllOptions } = useDict();
     const { message, loading } = useNotice();
-
+    const { general } = useHttpClient();
     const isSave: Ref<boolean> = ref(false);
     const tableFDom = ref(null);
     const tableFConfig: Ref<FormModel> = ref(emptyForm);
@@ -105,8 +99,8 @@ export default defineComponent({
     const saveTable = () => {
       (tableFDom.value as any).validate((val: boolean) => {
         if (val) {
-          clientService.general(systemApi.tableConfigApi.create, undefined, tableInfo.value).then(res => {
-            if (res.code === Constants.CODE.SUCCESS) {
+          general(systemApi.tableConfigApi.create, undefined, tableInfo.value).then(res => {
+            if (res.code === ResponseCodeEnum.SUCCESS) {
               message.success(res.message);
               isSave.value = true;
               refresh();
@@ -118,14 +112,14 @@ export default defineComponent({
       });
     };
     const create = () => {
-      fieldInfo.value = dataService.toFormValue(fieldFConfig.value as any);
+      fieldInfo.value = useData().toFormValue(fieldFConfig.value as any);
       show.value = true;
     };
     const confirmCreate = () => {
       const param = copy(fieldInfo.value);
       param.tableId = tableInfo.value.tableId;
-      clientService.general(systemApi.tableConfigApi.updateField, undefined, param).then(res => {
-        if (res.code === Constants.CODE.SUCCESS) {
+      general(systemApi.tableConfigApi.updateField, undefined, param).then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
           message.success(res.message);
           show.value = false;
           refresh();
@@ -143,7 +137,7 @@ export default defineComponent({
     };
     const preview = () => {
       tableInfo.value.fieldDtos = fieldList.value;
-      previewTableConfig.value = dataService.toTableModel(tableInfo.value);
+      previewTableConfig.value = useData().toTableModel(tableInfo.value);
 
       previewShow.value = true;
     };
@@ -172,22 +166,20 @@ export default defineComponent({
     };
 
     const init = (name: string) => {
-      clientService
-        .general<any>(systemApi.tableConfigApi.info, { name })
-        .then(res => {
-          if (res.code === Constants.CODE.SUCCESS) {
-            tableInfo.value = res.data.table;
-            fieldList.value = res.data.fields;
-            isSave.value = true;
-            tableFConfig.value.setFormDisable();
-          } else {
-            message.error(res.message);
-          }
-        });
+      general<any>(systemApi.tableConfigApi.info, { name }).then(res => {
+        if (res.code === ResponseCodeEnum.SUCCESS) {
+          tableInfo.value = res.data.table;
+          fieldList.value = res.data.fields;
+          isSave.value = true;
+          tableFConfig.value.setFormDisable();
+        } else {
+          message.error(res.message);
+        }
+      });
     };
     onMounted(() => {
       Promise.all([
-        dataService.loadForm([
+        useData().loadForm([
           {
             name: FormNameEnum.sysTableFieldForm,
             config: fieldFConfig,
@@ -199,7 +191,7 @@ export default defineComponent({
             info: tableInfo
           }
         ]),
-        dataService.loadTable([{ name: TableNameEnum.sysTableField, config: fieldTConfig }])
+        useData().loadTable([{ name: TableNameEnum.sysTableField, config: fieldTConfig }])
       ]).then(ress => {
         if (ress.findIndex(res => !res) === -1) {
           fieldFConfig.value?.setOptions("dict", convertAllOptions());
