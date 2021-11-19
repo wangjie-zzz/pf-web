@@ -1,5 +1,5 @@
 <template>
-  <pf-layout @tab-click="tabClick" @menu-open="menuOpen" @menu-close="menuClose" @logout="logout" @menu-click="menuClick">
+  <pf-layout :menuList="MenusData" @tab-click="tabClick" @menu-open="menuOpen" @menu-close="menuClose" @logout="logout" @menu-click="menuClick">
     <div class="pf-main">
       <router-view v-slot="{ Component }">
         <!--离场无动画-->
@@ -12,6 +12,8 @@
 </template>
 
 <script lang="ts">
+import { MenusData } from "@/constants/menusData";
+
 import { ElMessageBox } from "element-plus";
 import { defineComponent } from "vue";
 import { Crumb, ResponseCodeEnum, SysMenu, useAuth, useHttpClient } from "pf-component";
@@ -21,11 +23,13 @@ import { useRoute, useRouter } from "vue-router";
 export default defineComponent({
   name: "Main",
   setup() {
+    const router = useRouter();
     const tabClick = (e: Crumb) => {
-      useRouter().push({ path: e.path });
+      router.push({ path: e.path });
     };
     const menuClick = (menu: SysMenu) => {
-      useRouter().push({ path: menu.menuUrl });
+      console.log(menu);
+      router.push({ path: menu.menuUrl });
     };
     const menuOpen = () => {
       console.log("menuopen.........");
@@ -52,7 +56,8 @@ export default defineComponent({
       logout,
       menuOpen,
       menuClose,
-      menuClick
+      menuClick,
+      MenusData
     };
   }
 });

@@ -37,7 +37,9 @@ export default defineComponent({
         logining.value = false;
       }
     };
+    debugger;
     onMounted(() => {
+      debugger;
       initToken();
     });
     return {

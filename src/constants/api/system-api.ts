@@ -1,4 +1,4 @@
-import { Api, BaseApi, HeaderTypeEnum, MethodTypeEnum } from "pf-component";
+import { Api, BaseApi, HeaderTypeEnum, isTrue, MethodTypeEnum } from "pf-component";
 
 class SystemApi extends BaseApi {
   tenantApi: Api = {};
@@ -12,213 +12,220 @@ class SystemApi extends BaseApi {
   roleApi: Api = {};
   postApi: Api = {};
   constructor() {
-    super("pf-system", process.env.VUE_APP_SYSTEM_URL);
+    super(
+      "pf-system",
+      process.env.VUE_APP_SYSTEM_URL,
+      process.env.VUE_APP_BASE_URL,
+      process.env.VUE_APP_API_PREFIX,
+      isTrue(process.env.VUE_APP_ENABLE_PROXY),
+      isTrue(process.env.VUE_APP_ENABLE_GATEWAY)
+    );
     this.initKm();
   }
 
   initKm() {
     this.userApi = {
       adminCreate: {
-        url: this.getUrl() + "/sysUserInfo/adminCreate",
+        url: super.getUrl() + "/sysUserInfo/adminCreate",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.postApi = {
       list: {
-        url: this.getUrl() + "/sysPostInfo/list",
+        url: super.getUrl() + "/sysPostInfo/list",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       add: {
-        url: this.getUrl() + "/sysPostInfo/add",
+        url: super.getUrl() + "/sysPostInfo/add",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       addUser: {
-        url: this.getUrl() + "/sysPostInfo/addUser",
+        url: super.getUrl() + "/sysPostInfo/addUser",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       listUser: {
-        url: this.getUrl() + "/sysPostInfo/listUser",
+        url: super.getUrl() + "/sysPostInfo/listUser",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.roleApi = {
       list: {
-        url: this.getUrl() + "/sysRoleInfo/list",
+        url: super.getUrl() + "/sysRoleInfo/list",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       add: {
-        url: this.getUrl() + "/sysRoleInfo/add",
+        url: super.getUrl() + "/sysRoleInfo/add",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       addRoleRel: {
-        url: this.getUrl() + "/sysRoleInfo/addRoleRel",
+        url: super.getUrl() + "/sysRoleInfo/addRoleRel",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       addRoleAuth: {
-        url: this.getUrl() + "/sysRoleInfo/addRoleAuth",
+        url: super.getUrl() + "/sysRoleInfo/addRoleAuth",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       listRoleRel: {
-        url: this.getUrl() + "/sysRoleInfo/listRoleRel",
+        url: super.getUrl() + "/sysRoleInfo/listRoleRel",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       listRoleAuth: {
-        url: this.getUrl() + "/sysRoleInfo/listRoleAuth",
+        url: super.getUrl() + "/sysRoleInfo/listRoleAuth",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.dictApi = {
       delete: {
-        url: this.getUrl() + "/sysDictInfo/delete",
+        url: super.getUrl() + "/sysDictInfo/delete",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       update: {
-        url: this.getUrl() + "/sysDictInfo/update",
+        url: super.getUrl() + "/sysDictInfo/update",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.appApi = {
       list: {
-        url: this.getUrl() + "/sysAppInfo/selectAppAndMenuList",
+        url: super.getUrl() + "/sysAppInfo/selectAppAndMenuList",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.companyApi = {
       userList: {
-        url: this.getUrl() + "/sysCompanyInfo/userList",
+        url: super.getUrl() + "/sysCompanyInfo/userList",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       list: {
-        url: this.getUrl() + "/sysCompanyInfo/selectComTree",
+        url: super.getUrl() + "/sysCompanyInfo/selectComTree",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       deptList: {
-        url: this.getUrl() + "/sysCompanyInfo/deptList",
+        url: super.getUrl() + "/sysCompanyInfo/deptList",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       addCompany: {
-        url: this.getUrl() + "/sysCompanyInfo/addCompany",
+        url: super.getUrl() + "/sysCompanyInfo/addCompany",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       addDept: {
-        url: this.getUrl() + "/sysCompanyInfo/addDept",
+        url: super.getUrl() + "/sysCompanyInfo/addDept",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.tenantApi = {
       list: {
-        url: this.getUrl() + "/sysTenantInfo/list",
+        url: super.getUrl() + "/sysTenantInfo/list",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       delete: {
-        url: this.getUrl() + "/sysTenantInfo/delete",
+        url: super.getUrl() + "/sysTenantInfo/delete",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       update: {
-        url: this.getUrl() + "/sysTenantInfo/update",
+        url: super.getUrl() + "/sysTenantInfo/update",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.metadataApi = {
       dbNames: {
-        url: this.getUrl() + "/metadata/dbNames",
+        url: super.getUrl() + "/metadata/dbNames",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       getTableNamesByDb: {
-        url: this.getUrl() + "/metadata/getTableNamesByDb",
+        url: super.getUrl() + "/metadata/getTableNamesByDb",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       getTableNamesByDbAndTb: {
-        url: this.getUrl() + "/metadata/getTableNamesByDbAndTb",
+        url: super.getUrl() + "/metadata/getTableNamesByDbAndTb",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.formConfigApi = {
       list: {
-        url: this.getUrl() + "/sysFormInfo/list",
+        url: super.getUrl() + "/sysFormInfo/list",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       formInfo: {
-        url: this.getUrl() + "/sysFormInfo/info",
+        url: super.getUrl() + "/sysFormInfo/info",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       createForm: {
-        url: this.getUrl() + "/sysFormInfo/createForm",
+        url: super.getUrl() + "/sysFormInfo/createForm",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       createByTable: {
-        url: this.getUrl() + "/sysFormInfo/createByTable",
+        url: super.getUrl() + "/sysFormInfo/createByTable",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       /*createFormField: { // 用于form-data.ts的数据导入
-        url: this.getUrl() + "/sysFormInfo/createFormField",
+        url: super.getUrl() + "/sysFormInfo/createFormField",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },*/
       updateFormField: {
-        url: this.getUrl() + "/sysFormInfo/updateFormField",
+        url: super.getUrl() + "/sysFormInfo/updateFormField",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       }
     };
     this.tableConfigApi = {
       list: {
-        url: this.getUrl() + "/sysTableInfo/list",
+        url: super.getUrl() + "/sysTableInfo/list",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       info: {
-        url: this.getUrl() + "/sysTableInfo/info",
+        url: super.getUrl() + "/sysTableInfo/info",
         method: MethodTypeEnum.GET,
         header: HeaderTypeEnum.AUTH
       },
       create: {
-        url: this.getUrl() + "/sysTableInfo/create",
+        url: super.getUrl() + "/sysTableInfo/create",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       createByTable: {
-        url: this.getUrl() + "/sysTableInfo/createByTable",
+        url: super.getUrl() + "/sysTableInfo/createByTable",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       createField: {
         // 用于table-data.ts的数据导入
-        url: this.getUrl() + "/sysTableInfo/createField",
+        url: super.getUrl() + "/sysTableInfo/createField",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       },
       updateField: {
-        url: this.getUrl() + "/sysTableInfo/updateField",
+        url: super.getUrl() + "/sysTableInfo/updateField",
         method: MethodTypeEnum.POST,
         header: HeaderTypeEnum.AUTH
       }
